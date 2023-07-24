@@ -12,7 +12,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Login = lazy(() => import("./pages/login"));
-const DevDashboard = lazy(() => import("./pages/dashboard"));
+const DevDashboard = lazy(() => import("./pages/dev/dashboard"));
 const Schools = lazy(() => import("./pages/dev/schools"));
 
 const ProtectedRoute = ({ isAuthenticated, children }) => {

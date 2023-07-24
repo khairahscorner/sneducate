@@ -10,12 +10,13 @@ import Button from "../components/button";
 import axiosInstance from "../config/axios";
 import { useNavigate } from "react-router-dom";
 import { Preloader } from "../components/pageloader";
+import { useSelector } from "react-redux";
 
 const Login = () => {
-  const token = localStorage.getItem("token");
   const [initialLoad, setInitialLoad] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const type = useSelector((state) => state.auth.userType);
 
   const [isPassword, setIsPassword] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -25,7 +26,7 @@ const Login = () => {
   });
 
   useEffect(() => {
-    if (token) {
+    if (!type) {
       setInitialLoad(true);
       axiosInstance
         .get("/authenticate")
@@ -38,7 +39,7 @@ const Login = () => {
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [type]);
 
   const changeinputField = () => {
     setIsPassword(!isPassword);
@@ -61,6 +62,7 @@ const Login = () => {
       toast.success("Login Successful");
       localStorage.setItem("token", response.data.data.token);
       navigate("/dashboard");
+      // dispatch(tokenValidSuccess(response.data.data?.user_type)); //save user to redux
     } catch (error) {
       setLoading(false);
       setErrorMessage(error.response?.data?.message);
