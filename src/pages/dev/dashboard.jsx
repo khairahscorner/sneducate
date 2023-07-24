@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -16,8 +15,7 @@ const Dashboard = () => {
 
   const [initialLoad, setInitialLoad] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [userType, setUserType] = useState(null);
-  const [userDetails, setUserDetails] = useState(null);
+  const [userType, setUserType] = useState(type);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();

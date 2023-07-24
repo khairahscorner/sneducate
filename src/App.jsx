@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense } from "react";
 import {
   BrowserRouter as Router,
   Navigate,
@@ -13,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Login = lazy(() => import("./pages/login"));
 const DevDashboard = lazy(() => import("./pages/dev/dashboard"));
-const Schools = lazy(() => import("./pages/dev/schools"));
+const DevSchools = lazy(() => import("./pages/dev/schools"));
 
 const ProtectedRoute = ({ isAuthenticated, children }) => {
   if (!isAuthenticated) {
@@ -35,10 +34,16 @@ const App = () => {
               <Route
                 path="/dashboard"
                 element={
-                  <ProtectedRoute
-                    isAuthenticated={storageToken}
-                  >
+                  <ProtectedRoute isAuthenticated={storageToken}>
                     <DevDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/schools"
+                element={
+                  <ProtectedRoute isAuthenticated={storageToken}>
+                    <DevSchools />
                   </ProtectedRoute>
                 }
               />

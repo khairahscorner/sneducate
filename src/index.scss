@@ -167,5 +167,10 @@ textarea {
 .has-svg {
   svg {
     width: inherit;
+    height: inherit;
   }
+}
+.scroll-table {
+  display: flex;
+  min-height: 70px;
 }
