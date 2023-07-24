@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Maison Light";
+  src: url("./assets/fonts/MaisonNeue-Light.ttf") format("truetype");
+}
+
+/* for regular text/section headings */
+@font-face {
+  font-family: "Maison";
+  src: url("./assets/fonts/MaisonNeue-Book.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Maison Medium";
+  src: url("./assets/fonts/MaisonNeue-Medium.ttf") format("truetype");
+}
+
+/* For biggest headings */
+@font-face {
+  font-family: "Maison Bold";
+  src: url("./assets/fonts/MaisonNeue-Bold.ttf") format("truetype");
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Maison', sans-serif;
+  letter-spacing: 0.02em;
+}
+
+body {
+  margin: 0;
+  background-color: #F7F8FA;
+  color: #040F29;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Maison Bold', sans-serif;
+}
+
+h4,
+h5,
+h6,
+p,
+button {
+  font-family: 'Maison', sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+input,
+textarea,
+select {
+  font-family: 'Maison', sans-serif;
+}
+
+textarea {
+  resize: none;
+  width: 100%;
+  border: 1px solid #EAEDF5;
+  outline: none;
+  margin-bottom: 20px;
+}
+
+.btn-primary {
+  background: #ffc001;
+  border-radius: 5px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1em;
+  line-height: 1.25em;
+  text-align: center;
+  color: #ffffff;
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.btn-secondary {
+  background: #d6e7ff;
+  border-radius: 5px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1em;
+
+  line-height: 1.25em;
+  text-align: center;
+  color: #040F29;
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+
+/** Classes for the displayed toast **/
+.Toastify__toast {
+  box-shadow: 0px 3px 10px -1px rgba(0, 0, 0, 0.15) !important;
+  background: #fff !important;
+}
+.Toastify__progress-bar-theme--light {
+  background: #c0c0bf !important;
+}
+.Toastify__toast--default {
+  background: #fff !important;
+  color: #000 !important;
+}
+.Toastify__toast--info {
+  background: #fff !important;
+  color: #000 !important;
+}
+.Toastify__toast--success {
+  background: #fff !important;
+  color: rgb(2, 107, 37) !important;
+}
+.Toastify__toast--warning {
+  background: #fff !important;
+  color: #ffc001 !important;
+}
+.Toastify__toast--error {
+  background: #ffffff !important;
+  color: #5d0814 !important;
+}
+.Toastify__toast-body {
+  background: #fff !important;
+  font-family: 'Maison' !important;
+  font-size: 0.875rem;
+}
+
+.nav-link {
+  color: #0f0f0f;
+  display: flex;
+  align-items: baseline;
+}
+
+.nav-link:hover {
+  border: transparent;
+  background: #c2c2c2;
+}
+
+.head-text {
+  font-size: 1.875rem; /* Equivalent to 30px */
+  line-height: 130%;
+}
+
+.has-svg {
+  svg {
+    width: inherit;
+  }
+}
