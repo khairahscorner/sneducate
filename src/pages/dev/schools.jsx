@@ -54,6 +54,13 @@ const Schools = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
 
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [error, setError] = useState(false);
 
   const getAllSchools = () => {
@@ -72,7 +79,7 @@ const Schools = () => {
   const deleteSchool = () => {
     setIsLoading(true);
     axiosInstance
-      .get(`/school/${currentId}`)
+      .delete(`/school/${currentId}`)
       .then(() => {
         setIsLoading(false);
         toast.success(
@@ -144,6 +151,7 @@ const Schools = () => {
                           <th>School Name</th>
                           <th>Type</th>
                           <th>Admin Name</th>
+                          <th>Admin Email</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -154,8 +162,14 @@ const Schools = () => {
                             <td>{data.name}</td>
                             <td>{data.type.toUpperCase()}</td>
                             <td>
-                              {data.adminDetails?.first_name}{" "}
-                              {data.adminDetails?.last_name}
+                              {data.adminDetails
+                                ? `${data.adminDetails?.first_name} ${data.adminDetails?.last_name}`
+                                : "--"}
+                            </td>
+                            <td>
+                              {data.adminDetails?.email
+                                ? data.adminDetails?.email
+                                : "--"}
                             </td>
                             <td className="flex items-start justify-start">
                               <div
