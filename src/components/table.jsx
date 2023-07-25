@@ -56,11 +56,7 @@ export const TableRow = styled.tr`
   font-size: 14px;
   color: #1e2329;
   height: 60px;
-  // cursor: pointer;
   background: #fff;
-  &:nth-child(even) {
-    background: #abafaf;
-  }
   td {
     margin: 15px 0;
     padding-left: 30px;

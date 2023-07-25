@@ -1,16 +1,15 @@
 /* eslint-disable react/prop-types */
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ReactComponent as LogoIcon } from "../assets/icons/logo.svg";
 
 const Layout = (props) => {
   const { children, userType } = props;
-  const navigate = useNavigate();
 
   const logOut = () => {
     localStorage.removeItem("token");
     toast.info("Successfully logged out");
-    navigate("/");
+    window.location.reload();
   };
 
   return (
@@ -26,8 +25,11 @@ const Layout = (props) => {
             <li>
               <NavLink
                 to="/dashboard"
-                className={`nav-link px-10 py-3 ${({ isActive }) =>
-                  isActive ? "active" : ""}`}
+                className={({ isActive }) =>
+                  isActive
+                    ? "active nav-link px-10 py-3"
+                    : "nav-link px-10 py-3"
+                }
               >
                 <div className="text-lg">Dashboard</div>
               </NavLink>
@@ -36,8 +38,11 @@ const Layout = (props) => {
               <li>
                 <NavLink
                   to="/schools"
-                  className={`nav-link px-10 py-3 ${({ isActive }) =>
-                    isActive ? "active" : ""}`}
+                  className={({ isActive }) =>
+                    isActive
+                      ? "active nav-link px-10 py-3"
+                      : "nav-link px-10 py-3"
+                  }
                 >
                   <div className="text-lg">Schools</div>
                 </NavLink>
@@ -47,8 +52,11 @@ const Layout = (props) => {
                 <li>
                   <NavLink
                     to="/school-profile"
-                    className={`nav-link px-10 py-3 ${({ isActive }) =>
-                      isActive ? "active" : ""}`}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "active nav-link px-10 py-3"
+                        : "nav-link px-10 py-3"
+                    }
                   >
                     <div className="text-lg">School Profile</div>
                   </NavLink>
@@ -56,8 +64,11 @@ const Layout = (props) => {
                 <li>
                   <NavLink
                     to="/staffs"
-                    className={`nav-link px-10 py-3 ${({ isActive }) =>
-                      isActive ? "active" : ""}`}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "active nav-link px-10 py-3"
+                        : "nav-link px-10 py-3"
+                    }
                   >
                     <div className="text-lg">Staff Directory</div>
                   </NavLink>
@@ -65,8 +76,11 @@ const Layout = (props) => {
                 <li>
                   <NavLink
                     to="/students"
-                    className={`nav-link px-10 py-3 ${({ isActive }) =>
-                      isActive ? "active" : ""}`}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "active nav-link px-10 py-3"
+                        : "nav-link px-10 py-3"
+                    }
                   >
                     <div className="text-lg">Student Directory</div>
                   </NavLink>
@@ -76,8 +90,11 @@ const Layout = (props) => {
               <li>
                 <NavLink
                   to="/students"
-                  className={`nav-link px-10 py-3 ${({ isActive }) =>
-                    isActive ? "active" : ""}`}
+                  className={({ isActive }) =>
+                    isActive
+                      ? "active nav-link px-10 py-3"
+                      : "nav-link px-10 py-3"
+                  }
                 >
                   <div className="text-lg">Students</div>
                 </NavLink>

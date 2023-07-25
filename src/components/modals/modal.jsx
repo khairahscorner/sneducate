@@ -4,8 +4,8 @@ import { Closeicon } from "../../assets/icons/closeicon";
 
 const customStyles = {
   overlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    zIndex: 1000,
+    backgroundColor: "rgba(100, 100, 100, 0.5)",
+    zIndex: 100,
   },
   content: {
     background: "#ffffff",

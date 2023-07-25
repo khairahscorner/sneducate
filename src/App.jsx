@@ -21,6 +21,13 @@ const ProtectedRoute = ({ isAuthenticated, children }) => {
   return children;
 };
 
+const UnprotectedRoute = ({ isAuthenticated, children }) => {
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
+};
+
 const App = () => {
   const storageToken = localStorage.getItem("token");
 
@@ -30,7 +37,14 @@ const App = () => {
         <Suspense fallback={<Preloader />}>
           <Routes>
             <>
-              <Route path="/" element={<Login />} />
+              <Route
+                path="/"
+                element={
+                  <UnprotectedRoute isAuthenticated={storageToken}>
+                    <Login />
+                  </UnprotectedRoute>
+                }
+              />
               <Route
                 path="/dashboard"
                 element={
