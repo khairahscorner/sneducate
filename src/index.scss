@@ -170,9 +170,30 @@ textarea {
     height: inherit;
   }
 }
+.svg-rotate {
+  svg {
+    transform: rotate(180deg);
+  }
+}
+
 .scroll-table {
   display: flex;
   min-height: 70px;
+}
+.select {
+  background: #f6f7f9;
+  border: 1px solid #edeff2;
+  box-sizing: border-box;
+  padding: 10px;
+}
+.select-dropdown {
+  margin-top: 10px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(134, 134, 134, 0.2);
+  border-radius: 8px;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 9px 6px 6px;
 }
 
 .ReactModal__Overlay, .ReactModal__Overlay--after-open {

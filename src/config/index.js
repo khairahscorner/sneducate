@@ -3,10 +3,20 @@ export const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-const validEmailRegex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+export const validEmailRegex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 let error = null;
 export const validateEmail = (value) => {
     !validEmailRegex.test(value) ? (error = "Please enter a valid email address") : error = null;
     return error;
 };
 
+export const schoolTerms = [
+    { term: 1, start: "September", end: "December" },
+    { term: 2, start: "January", end: "April" },
+    { term: 3, start: "May", end: "July" }
+]
+
+export const getShortCode = (str) => {
+    const words = str.split(' ');
+    return words.map((word) => word.charAt(0).toUpperCase()).join('');
+}

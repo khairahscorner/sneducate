@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Login = lazy(() => import("./pages/login"));
+const ActivateAccount = lazy(() => import("./pages/activateAccount"));
 const DevDashboard = lazy(() => import("./pages/dev/dashboard"));
 const DevSchools = lazy(() => import("./pages/dev/schools"));
 
@@ -45,6 +46,7 @@ const App = () => {
                   </UnprotectedRoute>
                 }
               />
+              <Route path="/verify" element={<ActivateAccount />} />
               <Route
                 path="/dashboard"
                 element={

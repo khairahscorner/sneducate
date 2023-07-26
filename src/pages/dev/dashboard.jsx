@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -38,14 +39,12 @@ const Dashboard = () => {
         });
     }
     getStats();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
 
   useEffect(() => {
     if (!token) {
       navigate("/");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [statsError, setStatsError] = useState(false);
