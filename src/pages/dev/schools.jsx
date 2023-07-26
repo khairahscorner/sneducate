@@ -25,7 +25,7 @@ const maxStaffCount = 20;
 const Schools = () => {
   const token = localStorage.getItem("token");
   const type = useSelector((state) => state.auth.userType);
-  const { handleSubmit, control, reset } = useForm({
+  const { handleSubmit, control, setValue, reset } = useForm({
     criteriaMode: "all",
     mode: "onSubmit",
   });
@@ -78,6 +78,17 @@ const Schools = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (isEditModalOpen && currentSchoolDetails) {
+      setValue("name", currentSchoolDetails?.name);
+      setValue("count", currentSchoolDetails?.staff_count);
+      setValue("fname", currentSchoolDetails?.adminDetails?.first_name);
+      setValue("lname", currentSchoolDetails?.adminDetails?.last_name);
+      setValue("email", currentSchoolDetails?.adminDetails?.email);
+      setValue("role", currentSchoolDetails?.adminDetails?.role);
+    }
+  }, [isEditModalOpen, currentSchoolDetails, setValue]);
 
   const [error, setError] = useState(false);
 
@@ -158,14 +169,71 @@ const Schools = () => {
       });
   };
 
+  const updateSchool = (data) => {
+    setFormError(false);
+    let details = {
+      name: data?.name,
+      staff_count: data?.count,
+      shortcode: getShortCode(data?.name),
+    };
+    let adminDetails;
+    setFormLoading(true);
+    axiosInstance
+      .put(`/school/${currentSchoolDetails?.school_id}`, details)
+      .then(() => {
+        if (currentSchoolDetails?.adminDetails?.email !== data?.email) {
+          adminDetails = {
+            email: data?.email,
+            firstName: data?.fname,
+            lastName: data?.lname,
+            role: data?.role,
+            schoolId: currentSchoolDetails?.school_id,
+          };
+          axiosInstance
+            .delete(`/admin/${currentSchoolDetails?.adminDetails?.admin_id}`)
+            .then(() => {
+              axiosInstance.post("/admin/new", adminDetails).then(() => {
+                setFormLoading(false);
+                toast.success(`Details updated successfully`);
+                window.location.reload();
+              });
+            })
+            .catch((err) => {
+              setFormLoading(false);
+              setFormError(
+                "Error updating admin details: " + err.response?.data?.message
+              );
+            });
+        } else {
+          adminDetails = {
+            first_name: data?.fname,
+            last_name: data?.lname,
+            role: data?.role,
+          };
+          axiosInstance
+            .put(
+              `/admin/${currentSchoolDetails?.adminDetails?.admin_id}`,
+              adminDetails
+            )
+            .then(() => {
+              setFormLoading(false);
+              toast.success(`Details updated successfully`);
+              window.location.reload();
+            });
+        }
+      })
+      .catch((err) => {
+        setFormLoading(false);
+        setFormError("Error updating details: " + err.response?.data?.message);
+      });
+  };
+
   const openEditModal = (data) => {
+    console.log(data);
     setIsEditModalOpen(true);
     setCurrentSchoolDetails(data);
   };
-  const closeEditModal = () => {
-    setIsEditModalOpen(false);
-    setCurrentSchoolDetails(null);
-  };
+
   const openConfirmModal = (id) => {
     setIsDeleteModalOpen(true);
     setCurrentId(id);
@@ -299,7 +367,7 @@ const Schools = () => {
                   }) => (
                     <Textinput
                       onChange={onChange}
-                      checked={value}
+                      value={value}
                       label="School Name"
                       inputid="school_name"
                       name="school_name"
@@ -352,7 +420,7 @@ const Schools = () => {
                   }) => (
                     <Textinput
                       onChange={onChange}
-                      checked={value}
+                      value={value}
                       label="Number of Staff:"
                       inputid="staff_count"
                       name="staff_count"
@@ -380,7 +448,7 @@ const Schools = () => {
                   }) => (
                     <Textinput
                       onChange={onChange}
-                      checked={value}
+                      value={value}
                       label="First Name:"
                       inputid="first_name"
                       name="first_name"
@@ -402,7 +470,7 @@ const Schools = () => {
                   }) => (
                     <Textinput
                       onChange={onChange}
-                      checked={value}
+                      value={value}
                       label="Last Name:"
                       inputid="last_name"
                       name="last_name"
@@ -426,7 +494,7 @@ const Schools = () => {
                   }) => (
                     <Textinput
                       onChange={onChange}
-                      checked={value}
+                      value={value}
                       label="Email"
                       inputid="email"
                       name="email"
@@ -448,7 +516,7 @@ const Schools = () => {
                   }) => (
                     <Textinput
                       onChange={onChange}
-                      checked={value}
+                      value={value}
                       label="Role:"
                       inputid="role"
                       name="role"
@@ -464,16 +532,179 @@ const Schools = () => {
           </div>
         </div>
       </CustomModal>
+
       <CustomModal
         isOpen={isEditModalOpen}
-        onRequestClose={() => closeEditModal()}
+        onRequestClose={() => {
+          setIsEditModalOpen(false);
+          reset();
+        }}
+        modalLoading={formLoading}
+        confirmAction={() => handleSubmit(updateSchool)()}
       >
         <div>
           <h2 className=" text-h3 font-bold mb-3">
             Edit {currentSchoolDetails?.name}
           </h2>
+          {/* <p className="pb-4 text-xs">**Only these fields can be updated</p> */}
+          <div className="border-b border-neutral-200 mb-4"></div>
+          <div className=" p-3">
+            <form onSubmit={handleSubmit(updateSchool)}>
+              <ErrorMessage
+                style={{ marginBottom: "30px" }}
+                message={formError}
+              />
+              <div className="mb-6 grid grid-cols-2 gap-4">
+                <Controller
+                  name="name"
+                  defaultValue={currentSchoolDetails?.name}
+                  rules={{ required: true }}
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <Textinput
+                      onChange={onChange}
+                      value={value}
+                      label="School Name"
+                      inputid="name"
+                      name="name"
+                      type="text"
+                      iserror={error}
+                      placeholder="School name"
+                      message={"Please provide a school name."}
+                    />
+                  )}
+                />
+                <Controller
+                  name="count"
+                  defaultValue={currentSchoolDetails?.staff_count}
+                  rules={{
+                    required: true,
+                    min: 1,
+                    max: maxStaffCount,
+                  }}
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <Textinput
+                      onChange={onChange}
+                      value={value}
+                      label="Number of Staff:"
+                      inputid="count"
+                      name="count"
+                      type="number"
+                      iserror={error}
+                      placeholder="0"
+                      message={
+                        "Please provide the number of staff to provision for the school (at least 1)."
+                      }
+                    />
+                  )}
+                />
+              </div>
+              <h2 className="text-p1 font-extrabold mb-3">Admin Details</h2>
+              <div className="border-b border-neutral-200 mb-4"></div>
+              <div className="mb-4 grid grid-cols-2 gap-4">
+                <Controller
+                  name="fname"
+                  defaultValue={currentSchoolDetails?.adminDetails?.first_name}
+                  rules={{ required: true }}
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <Textinput
+                      onChange={onChange}
+                      value={value}
+                      label="First Name:"
+                      inputid="fname"
+                      name="fname"
+                      type="text"
+                      iserror={error}
+                      placeholder="Jane"
+                      message={"Please provide the name of the admin."}
+                    />
+                  )}
+                />
+                <Controller
+                  name="lname"
+                  defaultValue={currentSchoolDetails?.adminDetails?.last_name}
+                  rules={{ required: true }}
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <Textinput
+                      onChange={onChange}
+                      value={value}
+                      label="Last Name:"
+                      inputid="lname"
+                      name="lname"
+                      type="text"
+                      iserror={error}
+                      placeholder="Doe"
+                      message={"Please provide the name of the admin."}
+                    />
+                  )}
+                />
+              </div>
+              <div className="mb-4 grid grid-cols-2 gap-4">
+                <Controller
+                  name="email"
+                  defaultValue={currentSchoolDetails?.adminDetails?.email}
+                  rules={{ required: true, pattern: validEmailRegex }}
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <Textinput
+                      onChange={onChange}
+                      value={value}
+                      label="Email"
+                      inputid="email"
+                      name="email"
+                      type="email"
+                      iserror={error}
+                      placeholder="email@email.com"
+                      message={"Please provide a valid contact email."}
+                    />
+                  )}
+                />
+                <Controller
+                  name="role"
+                  defaultValue={currentSchoolDetails?.adminDetails?.role}
+                  rules={{ required: true }}
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <Textinput
+                      onChange={onChange}
+                      value={value}
+                      label="Role:"
+                      inputid="role"
+                      name="role"
+                      type="text"
+                      iserror={error}
+                      placeholder="School Administrator"
+                      message={"Please provide the role of the admin."}
+                    />
+                  )}
+                />
+              </div>
+            </form>
+          </div>
         </div>
       </CustomModal>
+
       <ConfirmationModal
         isOpen={isDeleteModalOpen}
         onRequestClose={() => closeConfirmModal()}
