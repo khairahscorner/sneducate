@@ -54,10 +54,20 @@ h3 {
 
 h4,
 h5,
-h6,
+h6 {
+  font-family: 'Maison Medium', sans-serif;
+}
+
 p,
 button {
   font-family: 'Maison', sans-serif;
+}
+
+.text-bold {
+  font-family: 'Maison Bold', sans-serif;
+}
+.text-medium {
+  font-family: 'Maison Medium', sans-serif;
 }
 
 a {

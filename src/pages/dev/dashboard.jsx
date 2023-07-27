@@ -45,7 +45,7 @@ const Dashboard = () => {
 
   return (
     <Layout userType="dev">
-      <div className="flex flex-wrap justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center py-20 px-10">
         <h1 className="head-text text-3xl font-medium">
           Hello!
           {/* <span className="name capitalize">User</span> */}

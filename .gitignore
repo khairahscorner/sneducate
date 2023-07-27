@@ -1,6 +1,7 @@
 # Logs
 
 .env
+*.zip
 
 logs
 *.log

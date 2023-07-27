@@ -147,7 +147,7 @@ const Layout = (props) => {
         </div>
       </nav>
       {/* Main Content */}
-      <main className="ml-52 py-20 px-10">{children}</main>
+      <main className="ml-52">{children}</main>
     </div>
   );
 };
