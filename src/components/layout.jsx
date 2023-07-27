@@ -87,18 +87,56 @@ const Layout = (props) => {
                 </li>
               </>
             ) : userType === "staff" ? (
-              <li>
-                <NavLink
-                  to="/students"
-                  className={({ isActive }) =>
-                    isActive
-                      ? "active nav-link px-10 py-3"
-                      : "nav-link px-10 py-3"
-                  }
-                >
-                  <div className="text-lg">Students</div>
-                </NavLink>
-              </li>
+              <>
+                <li>
+                  <NavLink
+                    to="/students"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "active nav-link px-10 py-3"
+                        : "nav-link px-10 py-3"
+                    }
+                  >
+                    <div className="text-lg">Students</div>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/term-curriculums"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "active nav-link px-10 py-3"
+                        : "nav-link px-10 py-3"
+                    }
+                  >
+                    <div className="text-lg">IEPs</div>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/assessments"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "active nav-link px-10 py-3"
+                        : "nav-link px-10 py-3"
+                    }
+                  >
+                    <div className="text-lg">Assessments</div>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/reports"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "active nav-link px-10 py-3"
+                        : "nav-link px-10 py-3"
+                    }
+                  >
+                    <div className="text-lg">Reports</div>
+                  </NavLink>
+                </li>
+              </>
             ) : null}
             <li>
               <a className="nav-link px-10 py-3" onClick={() => logOut()}>

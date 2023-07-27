@@ -12,8 +12,16 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Login = lazy(() => import("./pages/login"));
 const ActivateAccount = lazy(() => import("./pages/activateAccount"));
-const DevDashboard = lazy(() => import("./pages/dev/dashboard"));
-const DevSchools = lazy(() => import("./pages/dev/schools"));
+const Dashboard = lazy(() => import("./pages/dashboard"));
+const Schools = lazy(() => import("./pages/dev/schools"));
+const SchoolProfile = lazy(() => import("./pages/admins/schoolProfile"));
+const SchoolStaffs = lazy(() => import("./pages/admins/staffs"));
+const SchoolStudents = lazy(() => import("./pages/admins/students"));
+const SchoolReports = lazy(() => import("./pages/admins/reports"));
+const StaffStudents = lazy(() => import("./pages/staffs/students"));
+const TermCurriculums = lazy(() => import("./pages/staffs/termCurriculums"));
+const Assessments = lazy(() => import("./pages/staffs/assessments"));
+const StaffReports = lazy(() => import("./pages/staffs/reports"));
 
 const ProtectedRoute = ({ isAuthenticated, children }) => {
   if (!isAuthenticated) {
@@ -51,15 +59,85 @@ const App = () => {
                 path="/dashboard"
                 element={
                   <ProtectedRoute isAuthenticated={storageToken}>
-                    <DevDashboard />
+                    <Dashboard />
                   </ProtectedRoute>
                 }
               />
+
+              {/* for platform devs  */}
               <Route
                 path="/schools"
                 element={
                   <ProtectedRoute isAuthenticated={storageToken}>
-                    <DevSchools />
+                    <Schools />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* school admin routes  */}
+              <Route
+                path="/school/:schoolId/profile"
+                element={
+                  <ProtectedRoute isAuthenticated={storageToken}>
+                    <SchoolProfile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/school/:schoolId/staffs"
+                element={
+                  <ProtectedRoute isAuthenticated={storageToken}>
+                    <SchoolStaffs />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/school/:schoolId/students"
+                element={
+                  <ProtectedRoute isAuthenticated={storageToken}>
+                    <SchoolStudents />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/school/:schoolId/reports"
+                element={
+                  <ProtectedRoute isAuthenticated={storageToken}>
+                    <SchoolReports />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* school staff routes */}
+              <Route
+                path="/school/:schoolId/:staffId/students"
+                element={
+                  <ProtectedRoute isAuthenticated={storageToken}>
+                    <StaffStudents />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/school/:schoolId/:staffId/curriculums"
+                element={
+                  <ProtectedRoute isAuthenticated={storageToken}>
+                    <TermCurriculums />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/school/:schoolId/:staffId/assessments"
+                element={
+                  <ProtectedRoute isAuthenticated={storageToken}>
+                    <Assessments />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/school/:schoolId/:staffId/reports"
+                element={
+                  <ProtectedRoute isAuthenticated={storageToken}>
+                    <StaffReports />
                   </ProtectedRoute>
                 }
               />
