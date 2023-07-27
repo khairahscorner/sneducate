@@ -48,7 +48,7 @@ const Dashboard = () => {
         {isLoading ? (
           <Preloader />
         ) : pageError ? (
-          <p className="w-full text-center my-4 p-5">Could not complete request.</p>
+          <p className="w-full text-center my-4 p-5">Could not complete the request.</p>
         ) : (
           <>
             <div className="bg-zinc-100 border-b border-gray-200 p-5 flex items-center justify-end pr-9">
