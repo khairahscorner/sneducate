@@ -250,7 +250,7 @@ const Schools = () => {
         <Preloader />
       ) : (
         <Layout userType={userType}>
-          <div className="flex flex-wrap justify-between items-center mb-8">
+          <div className="flex flex-wrap justify-between items-center mb-8 py-20 px-10">
             <h1 className="head-text text-3xl font-medium"> All Schools</h1>
             <Button
               click={() => {
