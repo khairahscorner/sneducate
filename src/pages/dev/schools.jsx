@@ -44,7 +44,6 @@ const Schools = () => {
     type: "school",
     label: "School",
   });
-  const [formLoading, setFormLoading] = useState(false);
   const [formError, setFormError] = useState(null);
 
   const navigate = useNavigate();
@@ -140,7 +139,7 @@ const Schools = () => {
       lastName: data?.last_name,
       role: data?.role,
     };
-    setFormLoading(true);
+    setIsLoading(true);
     axiosInstance
       .post("/school/new", details)
       .then((res) => {
@@ -150,13 +149,13 @@ const Schools = () => {
         axiosInstance
           .post("/admin/new", adminDetails)
           .then(() => {
-            setFormLoading(false);
+            setIsLoading(false);
             toast.success(`New ${schoolType?.type} setup successfully`);
             window.location.reload();
           })
           .catch((err) => {
             axiosInstance.delete(`/school/${schoolId}`).then(() => {
-              setFormLoading(false);
+              setIsLoading(false);
             });
             setFormError(
               "Error setting up admin details: " + err.response?.data?.message
@@ -164,7 +163,7 @@ const Schools = () => {
           });
       })
       .catch((err) => {
-        setFormLoading(false);
+        setIsLoading(false);
         setFormError(err.response?.data?.message);
       });
   };
@@ -177,7 +176,7 @@ const Schools = () => {
       shortcode: getShortCode(data?.name),
     };
     let adminDetails;
-    setFormLoading(true);
+    setIsLoading(true);
     axiosInstance
       .put(`/school/${currentSchoolDetails?.school_id}`, details)
       .then(() => {
@@ -193,13 +192,13 @@ const Schools = () => {
             .delete(`/admin/${currentSchoolDetails?.adminDetails?.admin_id}`)
             .then(() => {
               axiosInstance.post("/admin/new", adminDetails).then(() => {
-                setFormLoading(false);
+                setIsLoading(false);
                 toast.success(`Details updated successfully`);
                 window.location.reload();
               });
             })
             .catch((err) => {
-              setFormLoading(false);
+              setIsLoading(false);
               setFormError(
                 "Error updating admin details: " + err.response?.data?.message
               );
@@ -216,14 +215,14 @@ const Schools = () => {
               adminDetails
             )
             .then(() => {
-              setFormLoading(false);
+              setIsLoading(false);
               toast.success(`Details updated successfully`);
               window.location.reload();
             });
         }
       })
       .catch((err) => {
-        setFormLoading(false);
+        setIsLoading(false);
         setFormError("Error updating details: " + err.response?.data?.message);
       });
   };
@@ -250,92 +249,98 @@ const Schools = () => {
         <Preloader />
       ) : (
         <Layout userType={userType}>
-          <div className="flex flex-wrap justify-between items-center mb-8 py-20 px-10">
-            <h1 className="head-text text-3xl font-medium"> All Schools</h1>
-            <Button
-              click={() => {
-                setIsCreateModalOpen(true);
-              }}
-              type="primary"
-              id="open-create-new"
-              extraClasses="w-auto mb-4"
-              size="big"
-            >
-              <span className="text-p1">Setup New school</span>
-            </Button>
-          </div>
-          {isLoading ? (
-            <div className="p-8 mt-20">
-              <Loader />
+          <div className="py-20 px-10">
+            <div className="flex flex-wrap justify-between items-center mb-8">
+              <h1 className="head-text text-3xl font-medium"> All Schools</h1>
+              <Button
+                click={() => {
+                  setIsCreateModalOpen(true);
+                }}
+                type="primary"
+                id="open-create-new"
+                extraClasses="w-auto mb-4"
+                size="big"
+              >
+                <span className="text-p1">Setup New school</span>
+              </Button>
             </div>
-          ) : allSchools ? (
-            <TableWrapper>
-              <div className="scroll-table">
-                {allSchools &&
-                  (allSchools.length > 0 ? (
-                    <Table className="w-full min-w-700px">
-                      <thead>
-                        <tr className="row">
-                          <th>S/N</th>
-                          <th>School Name</th>
-                          <th>Type</th>
-                          <th>Admin Name</th>
-                          <th>Admin Email</th>
-                          <th>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {allSchools.map((data, i) => (
-                          <TableRow className="p-2 row" key={`school-${i}`}>
-                            <td>{i + 1}</td>
-                            <td>{data.name}</td>
-                            <td>{data.type.toUpperCase()}</td>
-                            <td>
-                              {data.adminDetails
-                                ? `${data.adminDetails?.first_name} ${data.adminDetails?.last_name}`
-                                : "--"}
-                            </td>
-                            <td>
-                              {data.adminDetails?.email
-                                ? data.adminDetails?.email
-                                : "--"}
-                            </td>
-                            <td className="flex items-start justify-start">
-                              <div
-                                className=" w-5 h-5 cursor-pointer has-svg mr-3"
-                                onClick={() => openEditModal(data)}
-                              >
-                                <EditIcon />
-                              </div>
-                              <div
-                                className="w-5 h-5 cursor-pointer has-svg"
-                                onClick={() => openConfirmModal(data.school_id)}
-                              >
-                                <DeleteIcon />
-                              </div>
-                            </td>
-                          </TableRow>
-                        ))}
-                      </tbody>
-                    </Table>
-                  ) : (
-                    <div className="no-data">No Users.</div>
-                  ))}
-              </div>
-            </TableWrapper>
-          ) : (
-            error && (
+            {isLoading ? (
               <div className="p-8 mt-20">
-                <p className="text-center font-bold">Error fetching request.</p>
+                <Loader />
               </div>
-            )
-          )}
+            ) : allSchools ? (
+              <TableWrapper>
+                <div className="scroll-table">
+                  {allSchools &&
+                    (allSchools.length > 0 ? (
+                      <Table className="w-full min-w-700px">
+                        <thead>
+                          <tr className="row">
+                            <th>S/N</th>
+                            <th>School Name</th>
+                            <th>Type</th>
+                            <th>Admin Name</th>
+                            <th>Admin Email</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {allSchools.map((data, i) => (
+                            <TableRow className="p-2 row" key={`school-${i}`}>
+                              <td>{i + 1}</td>
+                              <td>{data.name}</td>
+                              <td>{data.type.toUpperCase()}</td>
+                              <td>
+                                {data.adminDetails
+                                  ? `${data.adminDetails?.first_name} ${data.adminDetails?.last_name}`
+                                  : "--"}
+                              </td>
+                              <td>
+                                {data.adminDetails?.email
+                                  ? data.adminDetails?.email
+                                  : "--"}
+                              </td>
+                              <td className="flex items-start justify-start">
+                                <div
+                                  className=" w-5 h-5 cursor-pointer has-svg mr-3"
+                                  onClick={() => openEditModal(data)}
+                                >
+                                  <EditIcon />
+                                </div>
+                                <div
+                                  className="w-5 h-5 cursor-pointer has-svg"
+                                  onClick={() =>
+                                    openConfirmModal(data.school_id)
+                                  }
+                                >
+                                  <DeleteIcon />
+                                </div>
+                              </td>
+                            </TableRow>
+                          ))}
+                        </tbody>
+                      </Table>
+                    ) : (
+                      <div className="no-data">No Users.</div>
+                    ))}
+                </div>
+              </TableWrapper>
+            ) : (
+              error && (
+                <div className="p-8 mt-20">
+                  <p className="text-center font-bold">
+                    Error fetching request.
+                  </p>
+                </div>
+              )
+            )}
+          </div>
         </Layout>
       )}
 
       <CustomModal
         isOpen={isCreateModalOpen}
-        modalLoading={formLoading}
+        modalLoading={isLoading}
         onRequestClose={() => {
           setIsCreateModalOpen(false);
           reset();
@@ -539,7 +544,7 @@ const Schools = () => {
           setIsEditModalOpen(false);
           reset();
         }}
-        modalLoading={formLoading}
+        modalLoading={isLoading}
         confirmAction={() => handleSubmit(updateSchool)()}
       >
         <div>
