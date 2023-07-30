@@ -26,22 +26,16 @@ const Dashboard = () => {
       .get("/staff")
       .then((res) => {
         console.log(res.data);
+        setIsLoading(false);
         setStaffDetails(res.data?.data);
-        axiosInstance
-          .get(`/school/${res.data?.data?.school_id}`)
-          .then((response) => {
-            setIsLoading(false);
-            setStaffDetails((details) => ({
-              ...details,
-              school_name: response.data?.data?.name,
-            }));
-          });
       })
       .catch(() => {
         setIsLoading(false);
         setPageError(true);
       });
   };
+  const openGuide = () => {};
+
   return (
     <>
       <Layout userType="staff">
@@ -53,13 +47,23 @@ const Dashboard = () => {
           </p>
         ) : (
           <>
-            <div className="bg-zinc-100 border-b border-gray-200 p-5 flex items-center justify-end pr-9">
-              <p className="text-bold mr-2 capitalize">
-                {staffDetails?.school_name}
-              </p>
-              <span className="px-1.5 py-0.5 rounded-full text-bold text-white text-p4 bg-status-good">
-                {staffDetails?.role}
-              </span>
+            <div className="bg-zinc-100 border-b border-gray-200 p-5 flex items-center justify-between flex-row-reverse pr-9">
+              <div className=" flex items-center">
+                <p className="text-bold mr-2 capitalize">
+                  {staffDetails?.schoolDetails?.name}
+                </p>
+                <span className="px-1.5 py-0.5 rounded-full text-bold text-white text-p4 bg-status-good">
+                  {staffDetails?.position}
+                </span>
+              </div>
+              <div>
+                <span
+                  onClick={() => openGuide()}
+                  className="px-3 py-2 cursor-pointer rounded-xl text-bold text-type text-p3 bg-primary-bg"
+                >
+                  Guide⭐️
+                </span>
+              </div>
             </div>
 
             <div className="flex flex-wrap justify-between items-center py-14 px-10">
