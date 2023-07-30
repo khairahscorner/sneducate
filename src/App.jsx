@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Navigate,
@@ -9,6 +9,7 @@ import {
 import { Preloader } from "./components/pageloader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { SmallScreenMessage } from "./components/smallScreenWrapper";
 
 const Login = lazy(() => import("./pages/login"));
 const ActivateAccount = lazy(() => import("./pages/activateAccount"));
@@ -39,7 +40,24 @@ const UnprotectedRoute = ({ isAuthenticated, children }) => {
 
 const App = () => {
   const storageToken = localStorage.getItem("token");
+  const [showSmallScreenMessage, setShowSmallScreenMessage] = useState(false);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setShowSmallScreenMessage(window.innerWidth < 1024);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  if (showSmallScreenMessage) {
+    return <SmallScreenMessage />;
+  }
   return (
     <>
       <Router>
