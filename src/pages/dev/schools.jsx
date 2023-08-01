@@ -19,8 +19,7 @@ import { ErrorMessage } from "../../components/error";
 import { Textinput } from "../../components/input/textinput";
 import { Select } from "../../components/input/select";
 import { getShortCode, schoolTerms, validEmailRegex } from "../../config";
-
-const maxStaffCount = 20;
+import { maxStaffCount } from "../../config";
 
 const Schools = () => {
   const token = localStorage.getItem("token");
@@ -321,7 +320,7 @@ const Schools = () => {
                         </tbody>
                       </Table>
                     ) : (
-                      <div className="no-data">No Users.</div>
+                      <div className="no-data">No Schools.</div>
                     ))}
                 </div>
               </TableWrapper>
@@ -394,7 +393,7 @@ const Schools = () => {
                     onClick={() => {
                       setSchoolType({ type: "school", label: "School" });
                     }}
-                    className="p-2 text-sm border-b border-b-gray-200 cursor-pointer"
+                    className="p-2 text-sm border-b border-b-gray-200 cursor-pointer last:border-none"
                   >
                     School
                   </div>
