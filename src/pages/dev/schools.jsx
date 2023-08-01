@@ -114,7 +114,9 @@ const Schools = () => {
         toast.success(
           "Successfully deleted school and all associated accounts"
         );
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -150,7 +152,9 @@ const Schools = () => {
           .then(() => {
             setIsLoading(false);
             toast.success(`New ${schoolType?.type} setup successfully`);
-            window.location.reload();
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
           })
           .catch((err) => {
             axiosInstance.delete(`/school/${schoolId}`).then(() => {
@@ -193,7 +197,9 @@ const Schools = () => {
               axiosInstance.post("/admin/new", adminDetails).then(() => {
                 setIsLoading(false);
                 toast.success(`Details updated successfully`);
-                window.location.reload();
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1500);
               });
             })
             .catch((err) => {
@@ -216,7 +222,9 @@ const Schools = () => {
             .then(() => {
               setIsLoading(false);
               toast.success(`Details updated successfully`);
-              window.location.reload();
+              setTimeout(() => {
+                window.location.reload();
+              }, 1500);
             });
         }
       })

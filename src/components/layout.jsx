@@ -9,7 +9,9 @@ const Layout = (props) => {
   const logOut = () => {
     localStorage.removeItem("token");
     toast.info("Successfully logged out");
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
   };
 
   const openGuide = () => {
