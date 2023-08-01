@@ -76,10 +76,6 @@ const Profile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    // getAdminProfile();
-  }, []);
-
   const getAdminProfile = () => {
     setIsLoading(true);
     setPageError(false);
@@ -124,9 +120,8 @@ const Profile = () => {
     };
     axiosInstance
       .put(`/school/${adminDetails?.school_id}`, details)
-      .then((res) => {
+      .then(() => {
         setFormLoading(false);
-        console.log(res.data);
         toast.success("Successfully updated school profile");
       })
       .catch((err) => {
@@ -144,9 +139,8 @@ const Profile = () => {
     };
     axiosInstance
       .put(`/admin/${adminDetails?.admin_id}`, details)
-      .then((res) => {
+      .then(() => {
         setFormLoading(false);
-        console.log(res.data);
         toast.success("Successfully updated admin profile");
       })
       .catch((err) => {
@@ -346,8 +340,8 @@ const Profile = () => {
                         )}
                       />
                       <Select
-                        selectText="Student Evaluation Framework:"
-                        label="School Type:"
+                        selectText="Select framework:"
+                        label="Students' Evaluation Framework:"
                         selected={framework?.label}
                       >
                         {starFrameworks.map((framework, i) => (

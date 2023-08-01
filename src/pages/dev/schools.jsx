@@ -235,7 +235,6 @@ const Schools = () => {
   };
 
   const openEditModal = (data) => {
-    console.log(data);
     setIsEditModalOpen(true);
     setCurrentSchoolDetails(data);
   };
