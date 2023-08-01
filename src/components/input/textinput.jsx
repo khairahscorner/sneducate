@@ -27,11 +27,11 @@ export const Textinput = ({
         {label}
       </label>
       <input
-        className={`rounded placeholder-type-200 text-type text-p2 font-normal px-2 py-3 transition focus:border-type focus:ring-0
+        className={`rounded placeholder-type-200 text-p2 font-normal px-2 py-3 transition focus:border-type focus:ring-0
         ${iserror ? "border-status-danger" : "border-neutral-200"} ${
           disabled
             ? "border-gray-100 bg-gray-200 text-gray-400 cursor-not-allowed"
-            : "bg-neutral-300 "
+            : "bg-neutral-300 text-type"
         }
         ${rowType && (inputClasses ? inputClasses : "col-span-4")}`}
         id={inputid}
