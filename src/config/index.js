@@ -10,10 +10,21 @@ export const validateEmail = (value) => {
     return error;
 };
 
+export const maxStaffCount = 20;
+
+export const starFrameworks = [
+    { label: "3-Star", val: 3 },
+]
+
 export const schoolTerms = [
     { term: 1, start: "September", end: "December" },
     { term: 2, start: "January", end: "April" },
     { term: 3, start: "May", end: "July" }
+]
+
+export const privateTerms = [
+    { label: "Quarterly", val: "quarterly" },
+    { label: "Bi-annually", val: "bi-annually" }
 ]
 
 export const getShortCode = (str) => {

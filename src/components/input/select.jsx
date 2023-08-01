@@ -2,7 +2,15 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowdownIcon } from "../../assets/icons/arrowdown";
 
-export const Select = ({ selectText, label, selected, children }) => {
+export const Select = ({
+  selectText,
+  label,
+  selected,
+  rowType,
+  labelClasses,
+  selectClasses,
+  children,
+}) => {
   const [isShow, setIsShow] = useState(false);
   const [dropdown, setdropdown] = useState("none");
 
@@ -40,8 +48,16 @@ export const Select = ({ selectText, label, selected, children }) => {
 
   return (
     <div ref={wrapperRef}>
-      <div className="relative">
-        <label className="text-p2 font-medium text-type mb-1 capitalize">
+      <div
+        className={`${
+          rowType ? "grid grid-cols-5 gap-2 items-center" : ""
+        } relative`}
+      >
+        <label
+          className={`text-p2 font-medium text-type mb-1 capitalize ${
+            rowType && `${labelClasses ? labelClasses : "col-span-1"}`
+          }`}
+        >
           {label}
         </label>
         <div
@@ -49,7 +65,9 @@ export const Select = ({ selectText, label, selected, children }) => {
             e.stopPropagation();
             opendropdown();
           }}
-          className="relative z-10 select pointer w-full h-12 rounded flex justify-between items-center mt-0.5"
+          className={`relative z-10 select pointer w-full h-12 rounded flex justify-between items-center mt-0.5  ${
+            rowType && (selectClasses ? selectClasses : "col-span-4")
+          }`}
         >
           <span className="text-sm">{selected ? selected : selectText}</span>
           <span className={`${isShow ? "svg-rotate" : ""}`}>
@@ -58,7 +76,7 @@ export const Select = ({ selectText, label, selected, children }) => {
         </div>
 
         <div
-          className={`absolute right-0 z-10 w-4/5 select-dropdown overflow-hidden transition transform origin-top ${
+          className={`absolute right-0 z-20 w-4/5 select-dropdown overflow-hidden transition transform origin-top ${
             dropdown === "flex"
               ? "flex p-2 opacity-1 translate-y-0"
               : "h-0 opacity-0 -translate-y-2 p-0"
