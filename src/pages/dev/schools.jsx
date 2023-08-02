@@ -178,38 +178,16 @@ const Schools = () => {
       staff_count: data?.count,
       shortcode: getShortCode(data?.name),
     };
-    let adminDetails;
     setIsLoading(true);
     axiosInstance
       .put(`/school/${currentSchoolDetails?.school_id}`, details)
       .then(() => {
-        if (currentSchoolDetails?.adminDetails?.email !== data?.email) {
-          adminDetails = {
-            email: data?.email,
-            firstName: data?.fname,
-            lastName: data?.lname,
-            role: data?.role,
-            schoolId: currentSchoolDetails?.school_id,
-          };
-          axiosInstance
-            .delete(`/admin/${currentSchoolDetails?.adminDetails?.admin_id}`)
-            .then(() => {
-              axiosInstance.post("/admin/new", adminDetails).then(() => {
-                setIsLoading(false);
-                toast.success(`Details updated successfully`);
-                setTimeout(() => {
-                  window.location.reload();
-                }, 1500);
-              });
-            })
-            .catch((err) => {
-              setIsLoading(false);
-              setFormError(
-                "Error updating admin details: " + err.response?.data?.message
-              );
-            });
-        } else {
-          adminDetails = {
+        if (
+          currentSchoolDetails?.adminDetails?.first_name !== data?.fname ||
+          currentSchoolDetails?.adminDetails?.last_name !== data?.lname ||
+          currentSchoolDetails?.adminDetails?.role !== data?.role
+        ) {
+          let adminDetails = {
             first_name: data?.fname,
             last_name: data?.lname,
             role: data?.role,
@@ -225,7 +203,19 @@ const Schools = () => {
               setTimeout(() => {
                 window.location.reload();
               }, 1500);
+            })
+            .catch((err) => {
+              setIsLoading(false);
+              setFormError(
+                "Error updating details: " + err.response?.data?.message
+              );
             });
+        } else {
+          setIsLoading(false);
+          toast.success(`Details updated successfully`);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         }
       })
       .catch((err) => {
@@ -270,11 +260,7 @@ const Schools = () => {
                 <span className="text-p1">Setup New school</span>
               </Button>
             </div>
-            {isLoading ? (
-              <div className="p-8 mt-20">
-                <Loader />
-              </div>
-            ) : allSchools ? (
+            {allSchools ? (
               <TableWrapper>
                 <div className="scroll-table">
                   {allSchools &&
@@ -666,27 +652,13 @@ const Schools = () => {
                 />
               </div>
               <div className="mb-4 grid grid-cols-2 gap-4">
-                <Controller
+                <Textinput
+                  value={currentSchoolDetails?.adminDetails?.email}
+                  label="Email"
+                  inputid="email"
                   name="email"
-                  defaultValue={currentSchoolDetails?.adminDetails?.email}
-                  rules={{ required: true, pattern: validEmailRegex }}
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <Textinput
-                      onChange={onChange}
-                      value={value}
-                      label="Email"
-                      inputid="email"
-                      name="email"
-                      type="email"
-                      iserror={error}
-                      placeholder="email@email.com"
-                      message={"Please provide a valid contact email."}
-                    />
-                  )}
+                  type="text"
+                  disabled={true}
                 />
                 <Controller
                   name="role"
@@ -723,6 +695,12 @@ const Schools = () => {
         type="delete"
         message="This will delete all associated staff and school admin accounts, and all student records!"
       />
+
+      {isLoading && (
+        <div className="p-8 mt-20">
+          <Loader />
+        </div>
+      )}
     </>
   );
 };

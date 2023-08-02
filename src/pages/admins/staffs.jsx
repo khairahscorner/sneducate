@@ -28,7 +28,7 @@ const Staffs = () => {
   const [pageError, setPageError] = useState(false);
   const [adminDetails, setAdminDetails] = useState(null);
 
-  const { handleSubmit, control, reset } = useForm({
+  const { handleSubmit, control, reset, setValue } = useForm({
     criteriaMode: "all",
     mode: "onSubmit",
   });
@@ -71,6 +71,14 @@ const Staffs = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (isEditModalOpen && currentStaffDetails) {
+      setValue("fname", currentStaffDetails?.first_name);
+      setValue("lname", currentStaffDetails?.last_name);
+      setValue("position", currentStaffDetails?.position);
+    }
+  }, [isEditModalOpen, currentStaffDetails, setValue]);
 
   const getAdminProfile = () => {
     setIsLoading(true);
@@ -209,14 +217,10 @@ const Staffs = () => {
                 extraClasses="w-auto mb-4"
                 size="big"
               >
-                <span className="text-p1">Register New staff</span>
+                <span className="text-p1">Register New Staff</span>
               </Button>
             </div>
-            {isLoading ? (
-              <div className="p-8 mt-20">
-                <Loader />
-              </div>
-            ) : allStaff ? (
+            {allStaff ? (
               <TableWrapper>
                 <div className="scroll-table">
                   {allStaff &&
@@ -507,6 +511,12 @@ const Staffs = () => {
         type="delete"
         message="This will delete the selected staff profile and all their students will be unassigned unless reassigned to another staff!"
       />
+
+      {isLoading && (
+        <div className="p-8 mt-20">
+          <Loader />
+        </div>
+      )}
     </>
   );
 };

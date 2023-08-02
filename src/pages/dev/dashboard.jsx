@@ -44,19 +44,16 @@ const Dashboard = () => {
   };
 
   return (
-    <Layout userType="dev">
-      <div className="py-20 px-10">
-        <div className="flex flex-wrap justify-between items-center">
-          <h1 className="head-text text-3xl font-medium">
-            Hello!
-            {/* <span className="name capitalize">User</span> */}
-          </h1>
-        </div>
-        {isLoading ? (
-          <div className="p-8 mt-20">
-            <Loader />
+    <>
+      <Layout userType="dev">
+        <div className="py-20 px-10">
+          <div className="flex flex-wrap justify-between items-center">
+            <h1 className="head-text text-3xl font-medium">
+              Hello!
+              {/* <span className="name capitalize">User</span> */}
+            </h1>
           </div>
-        ) : (
+
           <div className="grid grid-cols-4 gap-4 mt-12">
             <div className="bg-white rounded-md shadow-md">
               <div className="p-6">
@@ -89,12 +86,20 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-        )}
-        {statsError && (
-          <p className="w-full text-center my-4">Could not complete request.</p>
-        )}
-      </div>
-    </Layout>
+          {statsError && (
+            <p className="w-full text-center my-4">
+              Could not complete request.
+            </p>
+          )}
+        </div>
+      </Layout>
+
+      {isLoading && (
+        <div className="p-8 mt-20">
+          <Loader />
+        </div>
+      )}
+    </>
   );
 };
 
