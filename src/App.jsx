@@ -128,7 +128,7 @@ const App = () => {
 
               {/* school staff routes */}
               <Route
-                path="/school/:schoolId/:staffId/students"
+                path="/staff/students"
                 element={
                   <ProtectedRoute isAuthenticated={storageToken}>
                     <StaffStudents />
@@ -136,7 +136,7 @@ const App = () => {
                 }
               />
               <Route
-                path="/school/:schoolId/:staffId/curriculums"
+                path="/staff/curriculums"
                 element={
                   <ProtectedRoute isAuthenticated={storageToken}>
                     <TermCurriculums />
@@ -144,7 +144,7 @@ const App = () => {
                 }
               />
               <Route
-                path="/school/:schoolId/:staffId/assessments"
+                path="/staff/assessments"
                 element={
                   <ProtectedRoute isAuthenticated={storageToken}>
                     <Assessments />
@@ -152,7 +152,7 @@ const App = () => {
                 }
               />
               <Route
-                path="/school/:schoolId/:staffId/reports"
+                path="/staff/reports"
                 element={
                   <ProtectedRoute isAuthenticated={storageToken}>
                     <StaffReports />

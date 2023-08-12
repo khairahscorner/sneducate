@@ -176,7 +176,6 @@ const Profile = () => {
                 </h1>
                 <div
                   className="w-5 h-5 cursor-pointer ml-2.5 has-svg"
-                  onClick={() => alert()}
                   data-tooltip-id="info"
                   data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
                     <div>

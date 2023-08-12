@@ -13,7 +13,7 @@ const dot3 = keyframes`
     0% { transform: scale(1) }
     100% { transform: scale(0) }
 `;
-const PreloaderWrapper = styled.div`
+export const PreloaderWrapper = styled.div`
   width: 100%;
   height: 100vh;
   background-color: #fff;

@@ -95,12 +95,25 @@ const Layout = (props) => {
                     <div className="text-lg">Student Directory</div>
                   </NavLink>
                 </li>
+
+                <li>
+                  <NavLink
+                    to="/school/reports"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "active nav-link px-10 py-3"
+                        : "nav-link px-10 py-3"
+                    }
+                  >
+                    <div className="text-lg">Reports</div>
+                  </NavLink>
+                </li>
               </>
             ) : userType === "staff" ? (
               <>
                 <li>
                   <NavLink
-                    to="/students"
+                    to="/staff/students"
                     className={({ isActive }) =>
                       isActive
                         ? "active nav-link px-10 py-3"
@@ -112,7 +125,7 @@ const Layout = (props) => {
                 </li>
                 <li>
                   <NavLink
-                    to="/term-curriculums"
+                    to="/staff/curriculums"
                     className={({ isActive }) =>
                       isActive
                         ? "active nav-link px-10 py-3"
@@ -124,7 +137,7 @@ const Layout = (props) => {
                 </li>
                 <li>
                   <NavLink
-                    to="/assessments"
+                    to="/staff/assessments"
                     className={({ isActive }) =>
                       isActive
                         ? "active nav-link px-10 py-3"
@@ -136,7 +149,7 @@ const Layout = (props) => {
                 </li>
                 <li>
                   <NavLink
-                    to="/reports"
+                    to="/staff/reports"
                     className={({ isActive }) =>
                       isActive
                         ? "active nav-link px-10 py-3"
@@ -149,7 +162,7 @@ const Layout = (props) => {
               </>
             ) : null}
             <li>
-              <a className="nav-link px-10 py-3" onClick={() => logOut()}>
+              <a className="nav-link px-10 py-3 cursor-pointer" onClick={() => logOut()}>
                 <div className="text-lg">Logout</div>
               </a>
             </li>

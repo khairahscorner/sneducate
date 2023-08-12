@@ -355,7 +355,7 @@ const Schools = () => {
               <div className="mb-4">
                 <Controller
                   name="school_name"
-                  defaultValue={null}
+                  defaultValue=""
                   rules={{ required: true }}
                   control={control}
                   render={({
@@ -404,7 +404,7 @@ const Schools = () => {
                 </Select>
                 <Controller
                   name="staff_count"
-                  defaultValue={null}
+                  defaultValue=""
                   rules={{
                     required: true,
                     min: 1,
@@ -436,7 +436,7 @@ const Schools = () => {
               <div className="mb-4 grid grid-cols-2 gap-4">
                 <Controller
                   name="first_name"
-                  defaultValue={null}
+                  defaultValue=""
                   rules={{ required: true }}
                   control={control}
                   render={({
@@ -458,7 +458,7 @@ const Schools = () => {
                 />
                 <Controller
                   name="last_name"
-                  defaultValue={null}
+                  defaultValue=""
                   rules={{ required: true }}
                   control={control}
                   render={({
@@ -482,7 +482,7 @@ const Schools = () => {
               <div className="mb-4 grid grid-cols-2 gap-4">
                 <Controller
                   name="email"
-                  defaultValue={null}
+                  defaultValue=""
                   rules={{ required: true, pattern: validEmailRegex }}
                   control={control}
                   render={({
@@ -504,7 +504,7 @@ const Schools = () => {
                 />
                 <Controller
                   name="role"
-                  defaultValue={null}
+                  defaultValue=""
                   rules={{ required: true }}
                   control={control}
                   render={({

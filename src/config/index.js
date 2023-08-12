@@ -17,9 +17,9 @@ export const starFrameworks = [
 ]
 
 export const schoolTerms = [
-    { term: 1, start: "September", end: "December" },
-    { term: 2, start: "January", end: "April" },
-    { term: 3, start: "May", end: "July" }
+    { label: "First", val: "first" },
+    { label: "Second", val: "second" },
+    { label: "Third", val: "third" },
 ]
 
 export const privateTerms = [
@@ -27,7 +27,47 @@ export const privateTerms = [
     { label: "Bi-annually", val: "bi-annually" }
 ]
 
+export const schoolYears = () => {
+    const currentYear = new Date().getFullYear();
+    const yearOptions = [];
+
+    for (let i = 0; i <= 3; i++) {
+        const startYear = currentYear + i;
+        const endYear = startYear + 1;
+        yearOptions.push(`${startYear}/${endYear}`);
+    }
+
+    return yearOptions;
+}
+
+export const generateTermOptions = (value) => {
+    return value === 'quarterly' ? ['First Quarter', 'Second Quarter', 'Third Quarter'] : ['First Half', 'Second Half'];
+}
+
 export const getShortCode = (str) => {
     const words = str.split(' ');
     return words.map((word) => word.charAt(0).toUpperCase()).join('');
 }
+
+export const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+};
+
+export const customStyles = {
+    overlay: {
+        backgroundColor: "rgba(100, 100, 100, 0.5)",
+        zIndex: 100,
+    },
+    content: {
+        background: "#ffffff",
+        border: "1px solid transparent",
+        borderRadius: "4px",
+        padding: "0 20px",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        maxWidth: "50%",
+        height: "80vh", // Limit the height to maintain visibility on smaller screens
+    },
+};

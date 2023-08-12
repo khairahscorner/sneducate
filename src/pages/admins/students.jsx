@@ -20,6 +20,10 @@ import { ReactComponent as LinkIcon } from "../../assets/icons/link.svg";
 import CustomModal from "../../components/modals/modal";
 import ConfirmationModal from "../../components/modals/confirmModal";
 import { Select } from "../../components/input/select";
+import { Chart as ChartJS, ArcElement, Legend, Tooltip as chartTooltip } from "chart.js";
+import { Pie } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, chartTooltip, Legend);
 
 const Students = () => {
   const token = localStorage.getItem("token");
@@ -52,6 +56,7 @@ const Students = () => {
     contact_phone: "",
   });
   const [formError, setFormError] = useState(null);
+  const [chartData, setChartData] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -109,6 +114,30 @@ const Students = () => {
       });
   };
 
+  const data = {
+    labels: [
+      "Exceeded targets",
+      "On target",
+      "Just below target",
+      "Below target",
+      "Not graded",
+    ],
+    datasets: [
+      {
+        label: "Student performance",
+        data: chartData,
+        backgroundColor: [
+          "#4EC043",
+          "#0048E8",
+          "#ecc52c",
+          "#E81010",
+          "#899598",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   const getAllStudents = (schoolId) => {
     setIsLoading(true);
     axiosInstance
@@ -116,6 +145,8 @@ const Students = () => {
       .then((res) => {
         setIsLoading(false);
         setAllStudents(res.data.data?.students);
+        // stats
+        setChartData(res.data?.data?.stats);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -299,102 +330,139 @@ const Students = () => {
             role: adminDetails?.role,
           }}
         >
-          <div className="py-20 px-10">
-            <div className="flex flex-wrap justify-between items-center mb-8">
-              <h1 className="head-text text-3xl font-medium"> All Students</h1>
-              <Button
-                click={() => {
-                  setIsCreateModalOpen(true);
-                }}
-                type="primary"
-                id="open-create-new"
-                extraClasses="w-auto mb-4"
-                size="big"
-              >
-                <span className="text-p1">Register New Student</span>
-              </Button>
+          <div className="grid grid-cols-7 relative">
+            <div className="py-20 px-10 col-span-5">
+              <div className="flex flex-wrap justify-between items-center mb-8">
+                <h1 className="head-text text-3xl font-medium">
+                  {" "}
+                  All Students
+                </h1>
+                <Button
+                  click={() => {
+                    setIsCreateModalOpen(true);
+                  }}
+                  type="primary"
+                  id="open-create-new"
+                  extraClasses="w-auto mb-4"
+                  size="big"
+                >
+                  <span className="text-p1">Register New Student</span>
+                </Button>
+              </div>
+              {allStudents ? (
+                <TableWrapper>
+                  <div className="scroll-table">
+                    {allStudents &&
+                      (allStudents.length > 0 ? (
+                        <Table className="w-full min-w-700px">
+                          <thead>
+                            <tr className="row">
+                              <th>S/N</th>
+                              <th>StudentID</th>
+                              <th>Name</th>
+                              <th>Assigned Teacher</th>
+                              <th>Current Progress Level</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {allStudents.map((data, i) => (
+                              <TableRow
+                                className="p-2 row"
+                                key={`student-${i}`}
+                              >
+                                <td>{i + 1}</td>
+                                <td>
+                                  {adminDetails?.schoolDetails?.shortcode}
+                                  {data.student_id.toString().padStart(4, "0")}
+                                </td>
+                                <td>
+                                  {data.first_name} {data.last_name}
+                                </td>
+                                <td>
+                                  {data.staffDetails
+                                    ? data.staffDetails?.first_name +
+                                      " " +
+                                      data.staffDetails?.last_name
+                                    : "None"}
+                                </td>
+                                <td>
+                                  <span
+                                    className={`p-1 rounded text-bold text-type text-p4 uppercase
+                                  ${
+                                    data.grade_color == "blue"
+                                      ? " bg-rating-blue"
+                                      : data.grade_color == "green"
+                                      ? " bg-rating-green"
+                                      : data.grade_color == "yellow"
+                                      ? " bg-rating-yellow"
+                                      : data.grade_color == "red"
+                                      ? " bg-rating-red"
+                                      : "bg-zinc-200"
+                                  }`}
+                                  >
+                                    {data.grade_color
+                                      ? data.grade_color
+                                      : "Not Graded"}
+                                  </span>
+                                </td>
+                                <td className="flex items-start justify-start">
+                                  <div
+                                    className=" w-5 h-5 cursor-pointer has-svg mr-3"
+                                    onClick={() => openLinkModal(data)}
+                                  >
+                                    <LinkIcon />
+                                  </div>
+                                  <div
+                                    className=" w-5 h-5 cursor-pointer has-svg mr-3"
+                                    onClick={() => openEditModal(data)}
+                                  >
+                                    <EditIcon />
+                                  </div>
+                                  <div
+                                    className="w-5 h-5 cursor-pointer has-svg"
+                                    onClick={() =>
+                                      openConfirmModal(data.student_id)
+                                    }
+                                  >
+                                    <DeleteIcon />
+                                  </div>
+                                </td>
+                              </TableRow>
+                            ))}
+                          </tbody>
+                        </Table>
+                      ) : (
+                        <div className="no-data">No Students.</div>
+                      ))}
+                  </div>
+                </TableWrapper>
+              ) : (
+                pageError && (
+                  <div className="p-8 mt-20">
+                    <p className="text-center font-bold">
+                      Error fetching request.
+                    </p>
+                  </div>
+                )
+              )}
             </div>
-            {allStudents ? (
-              <TableWrapper>
-                <div className="scroll-table">
-                  {allStudents &&
-                    (allStudents.length > 0 ? (
-                      <Table className="w-full min-w-700px">
-                        <thead>
-                          <tr className="row">
-                            <th>S/N</th>
-                            <th>StudentID</th>
-                            <th>Name</th>
-                            <th>Year Enrolled</th>
-                            <th>Assigned Teacher</th>
-                            <th>Current Progress Level</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {allStudents.map((data, i) => (
-                            <TableRow className="p-2 row" key={`student-${i}`}>
-                              <td>{i + 1}</td>
-                              <td>
-                                {adminDetails?.schoolDetails?.shortcode}
-                                {data.student_id.toString().padStart(4, "0")}
-                              </td>
-                              <td>
-                                {data.first_name} {data.last_name}
-                              </td>
-                              <td>{data.year_enrolled}</td>
-                              <td>
-                                {data.staffDetails
-                                  ? data.staffDetails?.first_name +
-                                    " " +
-                                    data.staffDetails?.last_name
-                                  : "None"}
-                              </td>
-                              <td>
-                                {data.grade_color
-                                  ? data.grade_color
-                                  : "Not Graded"}
-                              </td>
-                              <td className="flex items-start justify-start">
-                                <div
-                                  className=" w-5 h-5 cursor-pointer has-svg mr-3"
-                                  onClick={() => openLinkModal(data)}
-                                >
-                                  <LinkIcon />
-                                </div>
-                                <div
-                                  className=" w-5 h-5 cursor-pointer has-svg mr-3"
-                                  onClick={() => openEditModal(data)}
-                                >
-                                  <EditIcon />
-                                </div>
-                                <div
-                                  className="w-5 h-5 cursor-pointer has-svg"
-                                  onClick={() =>
-                                    openConfirmModal(data.student_id)
-                                  }
-                                >
-                                  <DeleteIcon />
-                                </div>
-                              </td>
-                            </TableRow>
-                          ))}
-                        </tbody>
-                      </Table>
-                    ) : (
-                      <div className="no-data">No Students.</div>
-                    ))}
+            <div className="col-span-2 h-screen border-l border-solid border-gray-200">
+              <div className="py-20 px-5">
+                <h1 className="head-text text-xl font-medium pb-5">Overview</h1>
+                <div className="bg-white rounded-md shadow-md w-fit">
+                  <div className="p-6 mb-10">
+                    <div className="text-4xl font-bold text-type mb-2">
+                      {allStudents?.length}
+                    </div>
+                    <div className="text-black-600 font-medium text-sm">
+                      Assigned Students
+                    </div>
+                  </div>
                 </div>
-              </TableWrapper>
-            ) : (
-              pageError && (
-                <div className="p-8 mt-20">
-                  <p className="text-center font-bold">
-                    Error fetching request.
-                  </p>
-                </div>
-              )
-            )}
+                <Pie data={data} />
+              </div>
+            </div>
           </div>
         </Layout>
       )}

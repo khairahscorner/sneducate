@@ -209,3 +209,33 @@ textarea {
 .ReactModal__Overlay, .ReactModal__Overlay--after-open {
 z-index: 100 !important;
 }
+
+.modal-header {
+  padding: 20px; /* Add padding to the top header to create space */
+  margin-top: -20px;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1; /* Ensure the header stays above the content during scrolling */
+}
+
+.modal-footer {
+  padding: 20px; /* Add padding to the top header to create space */
+  margin-bottom: 0;
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  z-index: 1; /* Ensure the header stays above the content during scrolling */
+}
+
+.modal-content {
+  overflow-y: auto;
+}
+
+.fill-svg {
+  svg {
+    path {
+    fill: #ffcb00;
+  }
+}
+}
