@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Modal from "react-modal";
 import PageTitle from "../../components/pageTitle";
-import { Preloader, PreloaderWrapper } from "../../components/pageloader";
+import { Preloader } from "../../components/pageloader";
 import Layout from "../../components/layout";
 import axiosInstance from "../../config/axios";
 import { Controller, useForm } from "react-hook-form";
@@ -26,11 +26,30 @@ import CustomModal from "../../components/modals/modal";
 import { Closeicon } from "../../assets/icons/closeicon";
 import { ArrowdownIcon } from "../../assets/icons/arrowdown";
 import { ReactComponent as EditIcon } from "../../assets/icons/edit.svg";
+import { ReactComponent as SendIcon } from "../../assets/icons/send.svg";
 import { ReactComponent as StarIcon } from "../../assets/icons/star.svg";
 import { ReactComponent as InfoIcon } from "../../assets/icons/info.svg";
 import { Select } from "../../components/input/select";
-// import ConfirmationModal from "../../components/modals/confirmModal";
-// import { Select } from "../../components/input/select";
+import { Placeholder } from "../../components/placeholder";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip as chartTooltip,
+  Legend,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  chartTooltip,
+  Legend
+);
 
 const TermCurriculums = () => {
   const token = localStorage.getItem("token");
@@ -41,6 +60,11 @@ const TermCurriculums = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [pageError, setPageError] = useState(false);
   const [staffDetails, setStaffDetails] = useState(null);
+  const [stats, setStats] = useState({
+    currs: 0,
+    goals: 0,
+    targets: 0,
+  });
 
   const { handleSubmit, control, reset, setValue } = useForm({
     criteriaMode: "all",
@@ -73,6 +97,10 @@ const TermCurriculums = () => {
 
   const [selectedCurr, setSelectedCurr] = useState(null);
   const [currTarget, setCurrTarget] = useState(null);
+  const [chartData, setChartData] = useState({
+    labels: [],
+    data: [],
+  });
 
   const [formError, setFormError] = useState(null);
 
@@ -180,8 +208,14 @@ const TermCurriculums = () => {
               allCurr[allCurr.length - 1]?.term,
           });
           setSelectedCurr(allCurr[allCurr.length - 1]);
+          plotChart(allCurr[allCurr.length - 1]);
           resetVisible(allCurr[allCurr.length - 1]);
         } else setSelectedCurr(null);
+        setStats({
+          currs: allCurr.length,
+          goals: data?.goalCount,
+          targets: data?.targetCount,
+        });
       })
       .catch((err) => {
         setIsLoading(false);
@@ -191,12 +225,28 @@ const TermCurriculums = () => {
       });
   };
 
+  const plotChart = (curr) => {
+    let labelArr = [];
+    let dataArr = [];
+    curr.goals.forEach((goal) => {
+      dataArr.push(goal?.success_rating);
+      labelArr.push(
+        goal?.focus_area
+          .split(" ")
+          .map((word) => word[0].toUpperCase())
+          .join(".")
+      );
+    });
+    setChartData({ labels: labelArr, data: dataArr });
+  };
+
   const switchCurriculum = (curr) => {
     setCurriculumSelect({
       val: curr?.curriculum_id,
       label: curr?.academic_year + ", " + curr?.term,
     });
     setSelectedCurr(curr);
+    plotChart(curr);
     resetVisible(curr);
   };
 
@@ -329,6 +379,18 @@ const TermCurriculums = () => {
       });
   };
 
+  const data = {
+    labels: chartData.labels,
+    datasets: [
+      {
+        label: "Completion rate",
+        data: chartData.data,
+        backgroundColor: "#ecc52c",
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
     <>
       <PageTitle title="Term Curriculums" />
@@ -379,9 +441,9 @@ const TermCurriculums = () => {
                   </ul>
                 </div>
               </div>
-              <div className="col-span-9 p-8">
+              <div className="col-span-9">
                 {selectedStudentCurriculums ? (
-                  <>
+                  <div className="p-8">
                     <h1 className="head-text text-3xl font-medium mb-2">
                       {selectedStudent?.first_name} {selectedStudent?.last_name}
                     </h1>
@@ -719,8 +781,55 @@ const TermCurriculums = () => {
                                 </div>
                               </div>
                             ) : (
-                              <div className="my-36 text-center">
-                                New targets can be added here.
+                              <div className="p-8">
+                                <h3 className="text-lg font-medium mb-4">
+                                  Overview
+                                </h3>
+                                <table className="overview w-full border-collapse border-spacing-0 my-5 mx-auto">
+                                  <tbody className=" bg-transparent">
+                                    <tr>
+                                      <td className="text-bold">Curriculums</td>
+                                      <td className="text-2xl">
+                                        {stats.currs}
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td className="text-bold">Goals</td>
+                                      <td className="text-2xl">
+                                        {stats.goals}
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td className="text-bold">Targets</td>
+                                      <td className="text-2xl">
+                                        {stats.targets}
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                {selectedCurr?.goals.length > 0 && (
+                                  <>
+                                    <h3 className="text-lg font-medium my-4">
+                                      Goals Progress Chart
+                                    </h3>
+                                    <div>
+                                      <Bar
+                                        data={data}
+                                        height={"300px"}
+                                        width={"100%"}
+                                        options={{
+                                          responsive: true,
+                                          maintainAspectRatio: false,
+                                          scales: {
+                                            y: {
+                                              beginAtZero: true,
+                                            },
+                                          },
+                                        }}
+                                      />
+                                    </div>
+                                  </>
+                                )}
                               </div>
                             )}
                           </div>
@@ -743,7 +852,7 @@ const TermCurriculums = () => {
                         </Button>
                       </div>
                     )}
-                  </>
+                  </div>
                 ) : (
                   <Placeholder message={"Select a student to view the IEPs"} />
                 )}
@@ -762,19 +871,38 @@ const TermCurriculums = () => {
         style={customStyles}
         ariaHideApp={false}
       >
-        <div className="flex items-center justify-between modal-header">
-          <h2 className=" text-h3 font-bold">
-            Goals for {selectedCurr?.academic_year}, {selectedCurr?.term}
-          </h2>
-          <button
-            onClick={() => {
-              setIsViewModalOpen(false);
-            }}
-            className=" text-gray-500 hover:text-gray-700 cursor-pointer w-8 h-8 has-svg"
-          >
-            <Closeicon />
-          </button>
+        <div className=" modal-header">
+          <div className="flex items-center justify-between">
+            <h2 className=" text-h3 font-bold">
+              Goals for {selectedCurr?.academic_year}, {selectedCurr?.term}
+            </h2>
+            <button
+              onClick={() => {
+                setIsViewModalOpen(false);
+              }}
+              className=" text-gray-500 hover:text-gray-700 cursor-pointer w-8 h-8 has-svg"
+            >
+              <Closeicon />
+            </button>
+          </div>
+          <div className="flex items-center ml-2 mt-4">
+            <Textinput
+              value=""
+              label="Send to:"
+              inputid="out_email"
+              name="out_email"
+              type="email"
+              placeholder="email@email.com"
+              rowType
+            />
+            <Button type="primary" extraClasses="w-auto ml-3 p-0" size="big">
+              <div className=" w-5 h-5 cursor-pointer has-svg">
+                <SendIcon />
+              </div>
+            </Button>
+          </div>
         </div>
+        <div className="border-b border-neutral-200 mb-4"></div>
         <div className="modal-content">
           <div className="p-3">
             {selectedCurr?.goals &&
@@ -1252,11 +1380,3 @@ const TermCurriculums = () => {
 };
 
 export default TermCurriculums;
-
-const Placeholder = ({ message }) => {
-  return (
-    <PreloaderWrapper>
-      <div className=" text-center p-24">{message}</div>
-    </PreloaderWrapper>
-  );
-};

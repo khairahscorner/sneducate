@@ -239,3 +239,15 @@ z-index: 100 !important;
   }
 }
 }
+.box-shadow {
+  box-shadow: 0 8px 12px rgba(0,0,0,.04), 0 2px 4px rgba(0,0,0,.08);
+}
+.select__control {
+  background-color: #f6f7f9 !important
+}
+
+.overview th, .overview td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid black;
+}

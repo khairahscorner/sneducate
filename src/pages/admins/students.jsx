@@ -361,7 +361,7 @@ const Students = () => {
                               <th>StudentID</th>
                               <th>Name</th>
                               <th>Assigned Teacher</th>
-                              <th>Current Progress Level</th>
+                              <th>Progress Level</th>
                               <th>Actions</th>
                             </tr>
                           </thead>

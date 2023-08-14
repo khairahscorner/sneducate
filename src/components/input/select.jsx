@@ -10,6 +10,8 @@ export const Select = ({
   labelClasses,
   selectClasses,
   children,
+  error,
+  message,
 }) => {
   const [isShow, setIsShow] = useState(false);
   const [dropdown, setdropdown] = useState("none");
@@ -74,6 +76,7 @@ export const Select = ({
             <ArrowdownIcon />
           </span>
         </div>
+        {error && <p className="text-p3 text-red-500">{message}</p>}
 
         <div
           className={`absolute right-0 z-20 w-4/5 select-dropdown overflow-hidden transition transform origin-top ${

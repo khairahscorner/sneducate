@@ -17,9 +17,9 @@ export const starFrameworks = [
 ]
 
 export const schoolTerms = [
-    { label: "First", val: "first" },
-    { label: "Second", val: "second" },
-    { label: "Third", val: "third" },
+    { label: "First term", val: "first" },
+    { label: "Second term", val: "second" },
+    { label: "Third term", val: "third" },
 ]
 
 export const privateTerms = [
