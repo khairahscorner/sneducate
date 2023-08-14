@@ -18,7 +18,12 @@ import { Table, TableWrapper, TableRow } from "../../components/table";
 import { ReactComponent as EditIcon } from "../../assets/icons/edit.svg";
 import { ReactComponent as InfoIcon } from "../../assets/icons/info.svg";
 import CustomModal from "../../components/modals/modal";
-import { Chart as ChartJS, ArcElement, Legend, Tooltip as chartTooltip } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Legend,
+  Tooltip as chartTooltip,
+} from "chart.js";
 import { Pie } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, chartTooltip, Legend);
@@ -365,7 +370,7 @@ const Students = () => {
                     </div>
                   </div>
                 </div>
-                <Pie data={data} />
+                {allStudents && allStudents.length > 0 && <Pie data={data} />}
               </div>
             </div>
           </div>
