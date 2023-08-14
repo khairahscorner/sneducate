@@ -13,7 +13,7 @@ import { tokenValidSuccess } from "../../store/slices/authSlice";
 import { ErrorMessage } from "../../components/error";
 import { Select } from "../../components/input/select";
 import { Textinput } from "../../components/input/textinput";
-import { starFrameworks, privateTerms, maxStaffCount } from "../../config";
+import { starFrameworks, privateTerms } from "../../config";
 import Button from "../../components/button";
 import { ReactComponent as InfoIcon } from "../../assets/icons/info.svg";
 
@@ -310,33 +310,13 @@ const Profile = () => {
                       </div>
                     )}
                     <div className="mb-4 grid grid-cols-2 gap-5">
-                      <Controller
+                      <Textinput
+                        value={adminDetails?.schoolDetails?.staff_count}
+                        label="Number of Staff:"
+                        inputid="staff_count"
                         name="staff_count"
-                        defaultValue={adminDetails?.schoolDetails?.staff_count}
-                        rules={{
-                          required: true,
-                          min: 1,
-                          max: maxStaffCount,
-                        }}
-                        control={control}
-                        render={({
-                          field: { onChange, value },
-                          fieldState: { error },
-                        }) => (
-                          <Textinput
-                            onChange={onChange}
-                            value={value}
-                            label="Number of Staff:"
-                            inputid="staff_count"
-                            name="staff_count"
-                            type="number"
-                            iserror={error}
-                            placeholder="0"
-                            message={
-                              "Please provide the number of staff to provision for the school (at least 1)."
-                            }
-                          />
-                        )}
+                        type="number"
+                        disabled={true}
                       />
                       <Select
                         selectText="Select framework:"
