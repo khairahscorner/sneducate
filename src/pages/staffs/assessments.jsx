@@ -1,9 +1,11 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
+import ReactDOMServer from "react-dom/server";
 import MultiSelect from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Tooltip } from "react-tooltip";
 import PageTitle from "../../components/pageTitle";
 import { Preloader } from "../../components/pageloader";
 import { Placeholder } from "../../components/placeholder";
@@ -16,8 +18,10 @@ import { Textinput } from "../../components/input/textinput";
 import Button from "../../components/button";
 import { Table, TableWrapper, TableRow } from "../../components/table";
 import { ReactComponent as BackIcon } from "../../assets/icons/arrow-left.svg";
+import { ReactComponent as InfoIcon } from "../../assets/icons/info.svg";
 import { Select } from "../../components/input/select";
 import { FileIcon } from "../../assets/icons/file";
+import Loader from "../../components/loader";
 
 const Assessments = () => {
   const token = localStorage.getItem("token");
@@ -165,8 +169,25 @@ const Assessments = () => {
             <div className="grid grid-cols-10 relative">
               <div className="col-span-1 h-screen border-r border-solid border-gray-200">
                 <div className="py-24">
-                  <h1 className="text-sm font-medium pb-5 px-2">
-                    Students List
+                  <h1 className="pb-5 px-2 flex items-center justify-between">
+                    <span className="text-sm font-medium text-bold">
+                      Students List
+                    </span>
+                    <span
+                      className="w-3 h-3 cursor-pointer has-svg"
+                      data-tooltip-id="label"
+                      data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
+                        <div>
+                          **Color-coded to students overall progress level{" "}
+                          <br />
+                          based on their goals &amp; targets.
+                        </div>
+                      )}
+                      data-tooltip-place="right"
+                    >
+                      <InfoIcon />
+                      <Tooltip id="label" className="z-10" />
+                    </span>
                   </h1>
                   <ul className="text-xs">
                     {allStudents &&
@@ -386,433 +407,440 @@ const AssessComponent = ({
   };
 
   return (
-    <div className="p-8">
-      <div
-        className="flex cursor-pointer items-center mb-3"
-        onClick={() => {
-          goBack();
-          reset();
-          setCurrDetails(null);
-        }}
-      >
-        <div className=" w-5 h-5 has-svg mr-3">
-          <BackIcon />
+    <>
+      <div className="p-8">
+        <div
+          className="flex cursor-pointer items-center mb-3"
+          onClick={() => {
+            goBack();
+            reset();
+            setCurrDetails(null);
+          }}
+        >
+          <div className=" w-5 h-5 has-svg mr-3">
+            <BackIcon />
+          </div>
+          <p className="text-xs text-bold">Back</p>
         </div>
-        <p className="text-xs text-bold">Back</p>
-      </div>
-      <h3 className="head-text text-3xl font-medium mb-2">
-        {isUpdate ? "Update Assessment" : "Add New Assessment"}
-      </h3>
-      {!isUpdate && (
-        <p className="italic text-p2 mb-5 text-gray-400">
-          You cannot edit addressed targets after creation
-        </p>
-      )}
-      <ErrorMessage style={{ marginBottom: "30px" }} message={formError} />
-      <form
-        onSubmit={
-          isUpdate
-            ? handleSubmit(updateAssessment)
-            : handleSubmit(addNewAssessment)
-        }
-        className="grid grid-cols-7 gap-4 my-8 bg-zinc-50 border border-gray-200 rounded-md"
-      >
-        <div className="col-span-4 self-start border-r border-gray-200 p-4 pb-0">
-          {isUpdate ? (
-            <>
-              <div className="mb-2 grid grid-cols-2 gap-4">
-                <Textinput
-                  value={currDetails?.week}
-                  label="Week:"
-                  inputid="week"
-                  name="week"
-                  type="text"
-                  disabled={true}
-                />
-                <Textinput
-                  value={`${currDetails?.academic_year}, ${currDetails?.term}`}
-                  label="For Curriculum:"
-                  inputid="curriculum"
-                  name="curriculum"
-                  type="text"
-                  disabled={true}
-                />
-              </div>
-              <div className="mb-2">
-                <span className="text-p2 font-medium text-type capitalize mr-2">
-                  Baseline Summary:
-                </span>
-                <Controller
-                  name="baseline_summary"
-                  defaultValue={currDetails?.baseline_summary}
-                  rules={{
-                    required: true,
-                  }}
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <>
-                      <textarea
-                        onChange={onChange}
-                        value={value}
-                        className={`form-input rounded mt-1 mb-0 ${
-                          error ? "border-red-500" : "border-neutral-200"
-                        } focus:border-type focus:ring-0 bg-neutral-300 text-type`}
-                        id="baseline_summary"
-                        name="baseline_summary"
-                        rows={3}
-                      />
-                      {error && (
-                        <p className="text-p4 italic text-red-500">
-                          Enter some notes
-                        </p>
-                      )}
-                    </>
-                  )}
-                />
-              </div>
-              <div className="mb-2">
-                <span className="text-p2 font-medium text-type capitalize mr-2">
-                  Improvements:
-                </span>
-                <Controller
-                  name="improvement"
-                  defaultValue={currDetails?.improvement}
-                  rules={{
-                    required: true,
-                  }}
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <>
-                      <textarea
-                        onChange={onChange}
-                        value={value}
-                        className={`form-input rounded mt-1 mb-0 ${
-                          error ? "border-red-500" : "border-neutral-200"
-                        } focus:border-type focus:ring-0 bg-neutral-300 text-type`}
-                        id="improvement"
-                        name="improvement"
-                        rows={3}
-                      />
-                      {error && (
-                        <p className="text-p4 italic text-red-500">
-                          Enter some notes
-                        </p>
-                      )}
-                    </>
-                  )}
-                />
-              </div>
-              <div className="mb-2">
-                <span className="text-p2 font-medium text-type capitalize mr-2">
-                  Comments:
-                </span>
-                <Controller
-                  name="comments"
-                  defaultValue={currDetails.comments}
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <>
-                      <textarea
-                        onChange={onChange}
-                        value={value}
-                        className={`form-input rounded mt-1 mb-0 ${
-                          error ? "border-red-500" : "border-neutral-200"
-                        } focus:border-type focus:ring-0 bg-neutral-300 text-type`}
-                        id="comments"
-                        name="comments"
-                        rows={3}
-                      />
-                    </>
-                  )}
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="mb-2 grid grid-cols-2 gap-5">
-                <Controller
-                  name="week"
-                  defaultValue=""
-                  rules={{
-                    required: true,
-                    min: 1,
-                    max: 12,
-                  }}
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <Textinput
-                      onChange={onChange}
-                      value={value}
-                      label="Week:"
-                      inputid="week"
-                      name="week"
-                      type="number"
-                      iserror={error}
-                      placeholder="0"
-                      message={"Please enter the week (at least 1)."}
-                    />
-                  )}
-                />
-                <Controller
-                  name="curr"
-                  defaultValue=""
-                  rules={{ required: true }}
-                  control={control}
-                  render={({ fieldState: { error } }) => (
-                    <>
-                      <Select
-                        selectText="Select:"
-                        label="Academic Year:"
-                        selected={
-                          yearTerm?.year && yearTerm?.term
-                            ? `${yearTerm?.year}, ${yearTerm?.term}`
-                            : ""
-                        }
-                        error={error}
-                        message="Select one"
-                      >
-                        {allStudentCurriculums.map((curr, i) => (
-                          <div
-                            key={i}
-                            onClick={() => {
-                              setYearTerm({
-                                year: curr?.academic_year,
-                                term: curr?.term,
-                              });
-                              setValue("curr", "curr");
-                            }}
-                            className="p-2 text-sm border-b border-b-gray-200 last:border-none cursor-pointer"
-                          >
-                            {curr?.academic_year}, {curr?.term}
-                          </div>
-                        ))}
-                      </Select>
-                    </>
-                  )}
-                />
-              </div>
-              <div className="mb-2">
-                <Controller
-                  name="selected_targets"
-                  defaultValue=""
-                  control={control}
-                  render={() => (
-                    <>
-                      <label className="text-p2 font-medium text-type">
-                        Targets addressed:
-                      </label>
-                      <MultiSelect
-                        defaultValue=""
-                        isMulti
-                        name="selected_targets"
-                        options={targetOptions}
-                        className="mt-1"
-                        classNamePrefix="select"
-                        closeMenuOnSelect={true}
-                        hideSelectedOptions={true}
-                        isClearable={true}
-                        onChange={(selected) => {
-                          setSelectedTargets(selected);
-                        }}
-                      />
-                    </>
-                  )}
-                />
-              </div>
-              <div className="mb-2">
-                <span className="text-p2 font-medium text-type capitalize mr-2">
-                  Baseline Summary:
-                </span>
-                <Controller
-                  name="baseline_summary"
-                  defaultValue=""
-                  rules={{
-                    required: true,
-                  }}
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <>
-                      <textarea
-                        onChange={onChange}
-                        value={value}
-                        className={`form-input rounded mt-1 mb-0 ${
-                          error ? "border-red-500" : "border-neutral-200"
-                        } focus:border-type focus:ring-0 bg-neutral-300 text-type`}
-                        id="baseline_summary"
-                        name="baseline_summary"
-                        rows={3}
-                      />
-                      {error && (
-                        <p className="text-p4 italic text-red-500">
-                          Enter some notes
-                        </p>
-                      )}
-                    </>
-                  )}
-                />
-              </div>
-              <div className="mb-2">
-                <span className="text-p2 font-medium text-type capitalize mr-2">
-                  Improvements:
-                </span>
-                <Controller
-                  name="improvement"
-                  defaultValue=""
-                  rules={{
-                    required: true,
-                  }}
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <>
-                      <textarea
-                        onChange={onChange}
-                        value={value}
-                        className={`form-input rounded mt-1 mb-0 ${
-                          error ? "border-red-500" : "border-neutral-200"
-                        } focus:border-type focus:ring-0 bg-neutral-300 text-type`}
-                        id="improvement"
-                        name="improvement"
-                        rows={3}
-                      />
-                      {error && (
-                        <p className="text-p4 italic text-red-500">
-                          Enter some notes
-                        </p>
-                      )}
-                    </>
-                  )}
-                />
-              </div>
-              <div className="mb-2">
-                <span className="text-p2 font-medium text-type capitalize mr-2">
-                  Comments:
-                </span>
-                <Controller
-                  name="comments"
-                  defaultValue=""
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <>
-                      <textarea
-                        onChange={onChange}
-                        value={value}
-                        className={`form-input rounded mt-1 mb-0 ${
-                          error ? "border-red-500" : "border-neutral-200"
-                        } focus:border-type focus:ring-0 bg-neutral-300 text-type`}
-                        id="comments"
-                        name="comments"
-                        rows={3}
-                      />
-                    </>
-                  )}
-                />
-              </div>
-            </>
-          )}
-        </div>
-        <div className="col-span-3 p-4 pb-0">
-          {selectedTargets && selectedTargets.length > 0 ? (
-            <div className="mb-2">
-              <label className="text-p2 font-medium text-type">
-                Update progress to completion:
-              </label>
-              <TableWrapper>
-                <div className="scroll-table">
-                  <Table className="w-full">
-                    <thead>
-                      <tr className="row">
-                        <th>Target</th>
-                        <th>Current rating</th>
-                        <th>Updated</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {selectedTargets.map((data, i) => (
-                        <TableRow
-                          className="p-2 row"
-                          key={`target-update-${i}`}
-                        >
-                          <td>{data.label}</td>
-                          <td>{data.prev_rating}%</td>
-                          <td className="w-20">
-                            <Controller
-                              name={`update-rating-[${i}]`}
-                              defaultValue=""
-                              rules={{ required: true, min: 0, max: 100 }}
-                              control={control}
-                              render={({
-                                field: { onChange, value },
-                                fieldState: { error },
-                              }) => (
-                                <Textinput
-                                  onChange={(e) => {
-                                    onChange(e);
-                                    updateRatings(i, e.target.value);
-                                  }}
-                                  value={value}
-                                  inputid={`update-rating-[${i}]`}
-                                  name={`update-rating-[${i}]`}
-                                  type="number"
-                                  iserror={error}
-                                  placeholder="0"
-                                  message={"Please enter a valid value"}
-                                  rowType
-                                />
-                              )}
-                            />
-                          </td>
-                        </TableRow>
-                      ))}
-                    </tbody>
-                  </Table>
+        <h3 className="head-text text-3xl font-medium mb-2">
+          {isUpdate ? "Update Assessment" : "Add New Assessment"}
+        </h3>
+        {!isUpdate && (
+          <p className="italic text-p2 mb-5 text-gray-400">
+            You cannot edit addressed targets after creation
+          </p>
+        )}
+        <ErrorMessage style={{ marginBottom: "30px" }} message={formError} />
+        <form
+          onSubmit={
+            isUpdate
+              ? handleSubmit(updateAssessment)
+              : handleSubmit(addNewAssessment)
+          }
+          className="grid grid-cols-7 gap-4 my-8 bg-zinc-50 border border-gray-200 rounded-md"
+        >
+          <div className="col-span-4 self-start border-r border-gray-200 p-4 pb-0">
+            {isUpdate ? (
+              <>
+                <div className="mb-2 grid grid-cols-2 gap-4">
+                  <Textinput
+                    value={currDetails?.week}
+                    label="Week:"
+                    inputid="week"
+                    name="week"
+                    type="text"
+                    disabled={true}
+                  />
+                  <Textinput
+                    value={`${currDetails?.academic_year}, ${currDetails?.term}`}
+                    label="For Curriculum:"
+                    inputid="curriculum"
+                    name="curriculum"
+                    type="text"
+                    disabled={true}
+                  />
                 </div>
-              </TableWrapper>
-            </div>
-          ) : (
-            <div className="text-center my-24">
-              {isUpdate ? "No targets" : "Targets added will show here"}
-            </div>
-          )}
+                <div className="mb-2">
+                  <span className="text-p2 font-medium text-type capitalize mr-2">
+                    Baseline Summary:
+                  </span>
+                  <Controller
+                    name="baseline_summary"
+                    defaultValue={currDetails?.baseline_summary}
+                    rules={{
+                      required: true,
+                    }}
+                    control={control}
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <>
+                        <textarea
+                          onChange={onChange}
+                          value={value}
+                          className={`form-input rounded mt-1 mb-0 ${
+                            error ? "border-red-500" : "border-neutral-200"
+                          } focus:border-type focus:ring-0 bg-neutral-300 text-type`}
+                          id="baseline_summary"
+                          name="baseline_summary"
+                          rows={3}
+                        />
+                        {error && (
+                          <p className="text-p4 italic text-red-500">
+                            Enter some notes
+                          </p>
+                        )}
+                      </>
+                    )}
+                  />
+                </div>
+                <div className="mb-2">
+                  <span className="text-p2 font-medium text-type capitalize mr-2">
+                    Improvements:
+                  </span>
+                  <Controller
+                    name="improvement"
+                    defaultValue={currDetails?.improvement}
+                    rules={{
+                      required: true,
+                    }}
+                    control={control}
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <>
+                        <textarea
+                          onChange={onChange}
+                          value={value}
+                          className={`form-input rounded mt-1 mb-0 ${
+                            error ? "border-red-500" : "border-neutral-200"
+                          } focus:border-type focus:ring-0 bg-neutral-300 text-type`}
+                          id="improvement"
+                          name="improvement"
+                          rows={3}
+                        />
+                        {error && (
+                          <p className="text-p4 italic text-red-500">
+                            Enter some notes
+                          </p>
+                        )}
+                      </>
+                    )}
+                  />
+                </div>
+                <div className="mb-2">
+                  <span className="text-p2 font-medium text-type capitalize mr-2">
+                    Comments:
+                  </span>
+                  <Controller
+                    name="comments"
+                    defaultValue={currDetails.comments}
+                    control={control}
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <>
+                        <textarea
+                          onChange={onChange}
+                          value={value}
+                          className={`form-input rounded mt-1 mb-0 ${
+                            error ? "border-red-500" : "border-neutral-200"
+                          } focus:border-type focus:ring-0 bg-neutral-300 text-type`}
+                          id="comments"
+                          name="comments"
+                          rows={3}
+                        />
+                      </>
+                    )}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="mb-2 grid grid-cols-2 gap-5">
+                  <Controller
+                    name="week"
+                    defaultValue=""
+                    rules={{
+                      required: true,
+                      min: 1,
+                      max: 12,
+                    }}
+                    control={control}
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <Textinput
+                        onChange={onChange}
+                        value={value}
+                        label="Week:"
+                        inputid="week"
+                        name="week"
+                        type="number"
+                        iserror={error}
+                        placeholder="0"
+                        message={"Please enter the week (at least 1)."}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="curr"
+                    defaultValue=""
+                    rules={{ required: true }}
+                    control={control}
+                    render={({ fieldState: { error } }) => (
+                      <>
+                        <Select
+                          selectText="Select:"
+                          label="Academic Year:"
+                          selected={
+                            yearTerm?.year && yearTerm?.term
+                              ? `${yearTerm?.year}, ${yearTerm?.term}`
+                              : ""
+                          }
+                          error={error}
+                          message="Select one"
+                        >
+                          {allStudentCurriculums.map((curr, i) => (
+                            <div
+                              key={i}
+                              onClick={() => {
+                                setYearTerm({
+                                  year: curr?.academic_year,
+                                  term: curr?.term,
+                                });
+                                setValue("curr", "curr");
+                              }}
+                              className="p-2 text-sm border-b border-b-gray-200 last:border-none cursor-pointer"
+                            >
+                              {curr?.academic_year}, {curr?.term}
+                            </div>
+                          ))}
+                        </Select>
+                      </>
+                    )}
+                  />
+                </div>
+                <div className="mb-2">
+                  <Controller
+                    name="selected_targets"
+                    defaultValue=""
+                    control={control}
+                    render={() => (
+                      <>
+                        <label className="text-p2 font-medium text-type">
+                          Targets addressed:
+                        </label>
+                        <MultiSelect
+                          defaultValue=""
+                          isMulti
+                          name="selected_targets"
+                          options={targetOptions}
+                          className="mt-1"
+                          classNamePrefix="select"
+                          closeMenuOnSelect={true}
+                          hideSelectedOptions={true}
+                          isClearable={true}
+                          onChange={(selected) => {
+                            setSelectedTargets(selected);
+                          }}
+                        />
+                      </>
+                    )}
+                  />
+                </div>
+                <div className="mb-2">
+                  <span className="text-p2 font-medium text-type capitalize mr-2">
+                    Baseline Summary:
+                  </span>
+                  <Controller
+                    name="baseline_summary"
+                    defaultValue=""
+                    rules={{
+                      required: true,
+                    }}
+                    control={control}
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <>
+                        <textarea
+                          onChange={onChange}
+                          value={value}
+                          className={`form-input rounded mt-1 mb-0 ${
+                            error ? "border-red-500" : "border-neutral-200"
+                          } focus:border-type focus:ring-0 bg-neutral-300 text-type`}
+                          id="baseline_summary"
+                          name="baseline_summary"
+                          rows={3}
+                        />
+                        {error && (
+                          <p className="text-p4 italic text-red-500">
+                            Enter some notes
+                          </p>
+                        )}
+                      </>
+                    )}
+                  />
+                </div>
+                <div className="mb-2">
+                  <span className="text-p2 font-medium text-type capitalize mr-2">
+                    Improvements:
+                  </span>
+                  <Controller
+                    name="improvement"
+                    defaultValue=""
+                    rules={{
+                      required: true,
+                    }}
+                    control={control}
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <>
+                        <textarea
+                          onChange={onChange}
+                          value={value}
+                          className={`form-input rounded mt-1 mb-0 ${
+                            error ? "border-red-500" : "border-neutral-200"
+                          } focus:border-type focus:ring-0 bg-neutral-300 text-type`}
+                          id="improvement"
+                          name="improvement"
+                          rows={3}
+                        />
+                        {error && (
+                          <p className="text-p4 italic text-red-500">
+                            Enter some notes
+                          </p>
+                        )}
+                      </>
+                    )}
+                  />
+                </div>
+                <div className="mb-2">
+                  <span className="text-p2 font-medium text-type capitalize mr-2">
+                    Comments:
+                  </span>
+                  <Controller
+                    name="comments"
+                    defaultValue=""
+                    control={control}
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <>
+                        <textarea
+                          onChange={onChange}
+                          value={value}
+                          className={`form-input rounded mt-1 mb-0 ${
+                            error ? "border-red-500" : "border-neutral-200"
+                          } focus:border-type focus:ring-0 bg-neutral-300 text-type`}
+                          id="comments"
+                          name="comments"
+                          rows={3}
+                        />
+                      </>
+                    )}
+                  />
+                </div>
+              </>
+            )}
+          </div>
+          <div className="col-span-3 p-4 pb-0">
+            {selectedTargets && selectedTargets.length > 0 ? (
+              <div className="mb-2">
+                <label className="text-p2 font-medium text-type">
+                  Update progress to completion:
+                </label>
+                <TableWrapper>
+                  <div className="scroll-table">
+                    <Table className="w-full">
+                      <thead>
+                        <tr className="row">
+                          <th>Target</th>
+                          <th>Current rating</th>
+                          <th>Updated</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedTargets.map((data, i) => (
+                          <TableRow
+                            className="p-2 row"
+                            key={`target-update-${i}`}
+                          >
+                            <td>{data.label}</td>
+                            <td>{data.prev_rating}%</td>
+                            <td className="w-20">
+                              <Controller
+                                name={`update-rating-[${i}]`}
+                                defaultValue=""
+                                rules={{ required: true, min: 0, max: 100 }}
+                                control={control}
+                                render={({
+                                  field: { onChange, value },
+                                  fieldState: { error },
+                                }) => (
+                                  <Textinput
+                                    onChange={(e) => {
+                                      onChange(e);
+                                      updateRatings(i, e.target.value);
+                                    }}
+                                    value={value}
+                                    inputid={`update-rating-[${i}]`}
+                                    name={`update-rating-[${i}]`}
+                                    type="number"
+                                    iserror={error}
+                                    placeholder="0"
+                                    message={"Please enter a valid value"}
+                                    rowType
+                                  />
+                                )}
+                              />
+                            </td>
+                          </TableRow>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </div>
+                </TableWrapper>
+              </div>
+            ) : (
+              <div className="text-center my-24">
+                {isUpdate ? "No targets" : "Targets added will show here"}
+              </div>
+            )}
+          </div>
+          <div className="col-span-7 border-b border-neutral-200 -mt-4 m-4"></div>
+          <div className="my-0 w-min mx-4">
+            <Button
+              click={
+                isUpdate
+                  ? handleSubmit(updateAssessment)
+                  : handleSubmit(addNewAssessment)
+              }
+              type="primary"
+              id="school-update"
+              extraClasses="w-full mb-4"
+              size="big"
+              disabled={formLoading}
+            >
+              <span className="text-p1">{isUpdate ? "Save" : "Submit"}</span>
+            </Button>
+          </div>
+        </form>
+      </div>
+      {formLoading && (
+        <div className="p-8 mt-20">
+          <Loader />
         </div>
-        <div className="col-span-7 border-b border-neutral-200 -mt-4 m-4"></div>
-        <div className="my-0 w-min mx-4">
-          <Button
-            click={
-              isUpdate
-                ? handleSubmit(updateAssessment)
-                : handleSubmit(addNewAssessment)
-            }
-            type="primary"
-            id="school-update"
-            extraClasses="w-full mb-4"
-            size="big"
-            disabled={formLoading}
-          >
-            <span className="text-p1">{isUpdate ? "Save" : "Submit"}</span>
-          </Button>
-        </div>
-      </form>
-    </div>
+      )}
+    </>
   );
 };

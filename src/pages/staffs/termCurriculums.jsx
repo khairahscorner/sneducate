@@ -104,6 +104,7 @@ const TermCurriculums = () => {
     data: [],
   });
 
+  const [formLoading, setFormLoading] = useState(null);
   const [formError, setFormError] = useState(null);
 
   const navigate = useNavigate();
@@ -277,7 +278,7 @@ const TermCurriculums = () => {
   };
 
   const addNewTarget = (data) => {
-    setIsLoading(true);
+    setFormLoading(true);
     setFormError(false);
     let details = {
       ...data,
@@ -288,14 +289,14 @@ const TermCurriculums = () => {
     axiosInstance
       .post(`/target/new`, details)
       .then(() => {
-        setIsLoading(false);
+        setFormLoading(false);
         toast.success(`New target added successfully`);
         setTimeout(() => {
           window.location.reload();
         }, 1500);
       })
       .catch((err) => {
-        setIsLoading(false);
+        setFormLoading(false);
         setFormError("An error occurred: " + err.response?.data?.message);
       });
   };
@@ -414,8 +415,25 @@ const TermCurriculums = () => {
             <div className="grid grid-cols-10 relative">
               <div className="col-span-1 h-screen border-r border-solid border-gray-200">
                 <div className="py-24">
-                  <h1 className="text-sm font-medium pb-5 px-2">
-                    Students List
+                  <h1 className="pb-5 px-2 flex items-center justify-between">
+                    <span className="text-sm font-medium text-bold">
+                      Students List
+                    </span>
+                    <span
+                      className="w-3 h-3 cursor-pointer has-svg"
+                      data-tooltip-id="label"
+                      data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
+                        <div>
+                          **Color-coded to students overall progress level{" "}
+                          <br />
+                          based on their goals &amp; targets.
+                        </div>
+                      )}
+                      data-tooltip-place="right"
+                    >
+                      <InfoIcon />
+                      <Tooltip id="label" className="z-10" />
+                    </span>
                   </h1>
                   <ul className="text-xs">
                     {allStudents &&
@@ -778,7 +796,7 @@ const TermCurriculums = () => {
                                     type={type ? type : "primary"}
                                     extraClasses="w-auto"
                                     size="big"
-                                    disabled={isLoading}
+                                    disabled={formLoading}
                                   >
                                     <span className="text-p1">Submit</span>
                                   </Button>
