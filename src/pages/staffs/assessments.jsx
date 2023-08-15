@@ -295,7 +295,7 @@ const AssessComponent = ({
     return {
       value: target?.target_id,
       label: target?.title,
-      prev_rating: target?.prev_rating,
+      prev_rating: target?.success_rating,
     };
   });
 
@@ -574,14 +574,14 @@ const AssessComponent = ({
                     <>
                       <Select
                         selectText="Select:"
-                        label="Curriculum:"
+                        label="Academic Year:"
                         selected={
                           yearTerm?.year && yearTerm?.term
                             ? `${yearTerm?.year}, ${yearTerm?.term}`
                             : ""
                         }
                         error={error}
-                        message="Select a curriculum"
+                        message="Select one"
                       >
                         {allStudentCurriculums.map((curr, i) => (
                           <div
@@ -743,7 +743,7 @@ const AssessComponent = ({
                     <thead>
                       <tr className="row">
                         <th>Target</th>
-                        <th>Prev. rating</th>
+                        <th>Current rating</th>
                         <th>Updated</th>
                       </tr>
                     </thead>

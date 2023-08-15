@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import Modal from "react-modal";
 import PageTitle from "../../components/pageTitle";
 import { Preloader } from "../../components/pageloader";
+import Loader from "../../components/loader";
 import Layout from "../../components/layout";
 import axiosInstance from "../../config/axios";
 import { Controller, useForm } from "react-hook-form";
@@ -58,6 +59,7 @@ const TermCurriculums = () => {
 
   const [initialLoad, setInitialLoad] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
   const [pageError, setPageError] = useState(false);
   const [staffDetails, setStaffDetails] = useState(null);
   const [stats, setStats] = useState({
@@ -208,7 +210,8 @@ const TermCurriculums = () => {
               allCurr[allCurr.length - 1]?.term,
           });
           setSelectedCurr(allCurr[allCurr.length - 1]);
-          plotChart(allCurr[allCurr.length - 1]);
+          // set curriculum ratings data
+          plotChart(allCurr);
           resetVisible(allCurr[allCurr.length - 1]);
         } else setSelectedCurr(null);
         setStats({
@@ -225,17 +228,12 @@ const TermCurriculums = () => {
       });
   };
 
-  const plotChart = (curr) => {
+  const plotChart = (allCurr) => {
     let labelArr = [];
     let dataArr = [];
-    curr.goals.forEach((goal) => {
-      dataArr.push(goal?.success_rating);
-      labelArr.push(
-        goal?.focus_area
-          .split(" ")
-          .map((word) => word[0].toUpperCase())
-          .join(".")
-      );
+    allCurr.forEach((curr) => {
+      dataArr.push(curr.progress_rating);
+      labelArr.push(curr?.academic_year.split("/")[0] + curr.term);
     });
     setChartData({ labels: labelArr, data: dataArr });
   };
@@ -251,7 +249,7 @@ const TermCurriculums = () => {
   };
 
   const addGoal = (data) => {
-    setIsLoading(true);
+    setModalLoading(true);
     setFormError(false);
     const details = {
       ...data,
@@ -262,14 +260,14 @@ const TermCurriculums = () => {
     axiosInstance
       .post(`/goal/new`, details)
       .then(() => {
-        setIsLoading(false);
+        setModalLoading(false);
         toast.success(`New goal added successfully`);
         setTimeout(() => {
           window.location.reload();
         }, 1500);
       })
       .catch((err) => {
-        setIsLoading(false);
+        setModalLoading(false);
         setFormError("An error occurred: " + err.response?.data?.message);
       });
   };
@@ -308,7 +306,7 @@ const TermCurriculums = () => {
   };
 
   const updateTarget = (data) => {
-    setIsLoading(true);
+    setModalLoading(true);
     setFormError(false);
     let details = {
       ...data,
@@ -318,21 +316,20 @@ const TermCurriculums = () => {
     axiosInstance
       .put(`/target/${currTarget?.target_id}`, details)
       .then(() => {
-        setIsLoading(false);
+        setModalLoading(false);
         toast.success(`Target updated successfully`);
         setTimeout(() => {
           window.location.reload();
         }, 1500);
       })
       .catch((err) => {
-        setIsLoading(false);
+        setModalLoading(false);
         setFormError("An error occurred: " + err.response?.data?.message);
       });
   };
 
   const createNewCurr = () => {
-    console.log(newCurrDetails);
-    setIsLoading(true);
+    setModalLoading(true);
     setFormError(false);
     const details = {
       studentId: selectedStudent?.student_id,
@@ -351,22 +348,21 @@ const TermCurriculums = () => {
             curriculumId: res.data?.data?.curriculum_id,
             goalIds,
           };
-          console.log(data);
           axiosInstance
             .post("/goals", data)
             .then(() => {
-              setIsLoading(false);
+              setModalLoading(false);
               toast.success(`New curriculum added successfully`);
               setTimeout(() => {
                 window.location.reload();
               }, 1500);
             })
             .catch((err) => {
-              setIsLoading(false);
+              setModalLoading(false);
               setFormError(err.response?.data?.message);
             });
         } else {
-          setIsLoading(false);
+          setModalLoading(false);
           toast.success(`New curriculum added successfully`);
           setTimeout(() => {
             window.location.reload();
@@ -374,7 +370,7 @@ const TermCurriculums = () => {
         }
       })
       .catch((err) => {
-        setIsLoading(false);
+        setModalLoading(false);
         setFormError("An error occurred: " + err.response?.data?.message);
       });
   };
@@ -406,6 +402,10 @@ const TermCurriculums = () => {
         >
           {isLoading ? (
             <Preloader />
+          ) : modalLoading ? (
+            <div className="p-8 mt-20">
+              <Loader />
+            </div>
           ) : pageError ? (
             <p className="w-full text-center my-4 p-5">
               Could not complete the request.
@@ -707,6 +707,7 @@ const TermCurriculums = () => {
                                         name="success_rating"
                                         defaultValue=""
                                         control={control}
+                                        rules={{ min: 0, max: 100 }}
                                         render={({
                                           field: { onChange, value },
                                           fieldState: { error },
@@ -720,6 +721,9 @@ const TermCurriculums = () => {
                                             type="number"
                                             iserror={error}
                                             placeholder="0"
+                                            message={
+                                              "please enter a value between 0 and 100"
+                                            }
                                           />
                                         )}
                                       />
@@ -810,7 +814,7 @@ const TermCurriculums = () => {
                                 {selectedCurr?.goals.length > 0 && (
                                   <>
                                     <h3 className="text-lg font-medium my-4">
-                                      Goals Progress Chart
+                                      Curriculum Progress Chart
                                     </h3>
                                     <div>
                                       <Bar
@@ -907,40 +911,50 @@ const TermCurriculums = () => {
           <div className="p-3">
             {selectedCurr?.goals &&
               (selectedCurr?.goals.length > 0 ? (
-                selectedCurr?.goals.map((goal, i) => (
-                  <div key={`view-goal-${i}`}>
-                    <div className="border-b border-neutral-200 mb-4"></div>
-                    <div className="grid grid-cols-12 gap-1 items-start">
-                      <p className="col-span-1 text-2xl text-bold">{i + 1}</p>
-                      <div className="col-span-11">
-                        <div className="mb-2">
-                          <span className="text-bold">Focus Area: </span>
-                          {goal.focus_area}
-                        </div>
-                        <div className="mb-2">
-                          <span className="text-bold">Target: </span>
-                          {goal.target}
-                        </div>
-                        <div className="mb-2">
-                          <span className="text-bold">Strategy: </span>
-                          {goal.strategy}
-                        </div>
-                        <div className="mb-2">
-                          <span className="text-bold">Success Criteria: </span>
-                          {goal.success_criteria ?? "Not Available"}
-                        </div>
-                        <div className="mb-2">
-                          <span className="text-bold">Latest Evaluation: </span>
-                          {goal.latest_eval ?? "Not Available"}
-                        </div>
-                        <div className="mb-2">
-                          <span className="text-bold">Status: </span>
-                          {goal.success_rating}% Achieved
+                selectedCurr?.goals.map((goal, i) => {
+                  return (
+                    <div key={`view-goal-${i}`}>
+                      <div className="border-b border-neutral-200 mb-4"></div>
+                      <div className="grid grid-cols-12 gap-1 items-start">
+                        <p className="col-span-1 text-2xl text-bold">{i + 1}</p>
+                        <div className="col-span-11">
+                          <div className="mb-2">
+                            <span className="text-bold">Focus Area: </span>
+                            {goal.focus_area}
+                          </div>
+                          <div className="mb-2">
+                            <span className="text-bold">Target: </span>
+                            {goal.target}
+                          </div>
+                          <div className="mb-2">
+                            <span className="text-bold">Strategy: </span>
+                            {goal.strategy}
+                          </div>
+                          <div className="mb-2">
+                            <span className="text-bold">
+                              Success Criteria:{" "}
+                            </span>
+                            {goal.success_criteria != ""
+                              ? goal.success_criteria
+                              : "Not Available"}
+                          </div>
+                          <div className="mb-2">
+                            <span className="text-bold">
+                              Latest Evaluation:{" "}
+                            </span>
+                            {goal.latest_eval
+                              ? goal.latest_eval
+                              : "Not Available"}
+                          </div>
+                          <div className="mb-2">
+                            <span className="text-bold">Status: </span>
+                            {goal.success_rating}% Achieved
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))
+                  );
+                })
               ) : (
                 <p className="my-5 text-center">No goals</p>
               ))}
@@ -1104,28 +1118,6 @@ const TermCurriculums = () => {
                 )}
               />
             </div>
-            <div className="mb-2">
-              <Controller
-                name="success_rating"
-                defaultValue=""
-                control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
-                  <Textinput
-                    onChange={onChange}
-                    value={value}
-                    label="% Achieved:"
-                    inputid="success_rating"
-                    name="success_rating"
-                    type="number"
-                    iserror={error}
-                    placeholder="0"
-                  />
-                )}
-              />
-            </div>
           </form>
         </div>
         <div className="flex flex-row-reverse items-end modal-footer">
@@ -1195,6 +1187,7 @@ const TermCurriculums = () => {
                 <Controller
                   name="success_rating"
                   defaultValue={currTarget?.success_rating}
+                  rules={{ min: 0, max: 100 }}
                   control={control}
                   render={({
                     field: { onChange, value },
@@ -1209,6 +1202,7 @@ const TermCurriculums = () => {
                       type="number"
                       iserror={error}
                       placeholder="0"
+                      message={"please enter a value between 0 and 100"}
                     />
                   )}
                 />

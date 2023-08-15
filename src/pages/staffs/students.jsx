@@ -244,75 +244,81 @@ const Students = () => {
             role: staffDetails?.position,
           }}
         >
-          <div className="grid grid-cols-7 relative">
-            <div className="py-20 px-7 col-span-5">
-              <div className="flex flex-wrap justify-between items-center mb-8">
-                <h1 className="head-text text-3xl font-medium">
-                  {" "}
-                  All Students
-                </h1>
-                <Button
-                  click={() => {
-                    setIsCreateModalOpen(true);
-                  }}
-                  type="primary"
-                  id="open-create-new"
-                  extraClasses="w-auto mb-4"
-                  size="big"
-                >
-                  <span className="text-p1">Add New Student</span>
-                </Button>
-              </div>
-              {allStudents ? (
-                <TableWrapper>
-                  <div className="scroll-table">
-                    {allStudents &&
-                      (allStudents.length > 0 ? (
-                        <Table className="w-full min-w-700px">
-                          <thead>
-                            <tr className="row">
-                              <th>S/N</th>
-                              <th>StudentID</th>
-                              <th>Name</th>
-                              <th>Year Enrolled</th>
-                              <th className="flex items-center">
-                                Current Level
-                                <span
-                                  className="w-3 h-3 cursor-pointer has-svg ml-1 lowercase"
-                                  data-tooltip-id="info"
-                                  data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
-                                    <div>
-                                      **Indicates students progress level based
-                                      on their most recent curriculum.
-                                    </div>
-                                  )}
-                                  data-tooltip-place="top"
-                                >
-                                  <InfoIcon />
-                                  <Tooltip id="info" />
-                                </span>
-                              </th>
-                              <th></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {allStudents.map((data, i) => (
-                              <TableRow
-                                className="p-2 row"
-                                key={`student-${i}`}
-                              >
-                                <td>{i + 1}</td>
-                                <td>
-                                  {staffDetails?.schoolDetails?.shortcode}
-                                  {data.student_id.toString().padStart(4, "0")}
-                                </td>
-                                <td>
-                                  {data.first_name} {data.last_name}
-                                </td>
-                                <td>{data.year_enrolled}</td>
-                                <td>
+          {isLoading ? (
+            <Preloader />
+          ) : (
+            <div className="grid grid-cols-7 relative">
+              <div className="py-20 px-7 col-span-5">
+                <div className="flex flex-wrap justify-between items-center mb-8">
+                  <h1 className="head-text text-3xl font-medium">
+                    {" "}
+                    All Students
+                  </h1>
+                  <Button
+                    click={() => {
+                      setIsCreateModalOpen(true);
+                    }}
+                    type="primary"
+                    id="open-create-new"
+                    extraClasses="w-auto mb-4"
+                    size="big"
+                  >
+                    <span className="text-p1">Add New Student</span>
+                  </Button>
+                </div>
+                {allStudents ? (
+                  <TableWrapper>
+                    <div className="scroll-table">
+                      {allStudents &&
+                        (allStudents.length > 0 ? (
+                          <Table className="w-full min-w-700px">
+                            <thead>
+                              <tr className="row">
+                                <th>S/N</th>
+                                <th>StudentID</th>
+                                <th>Name</th>
+                                <th>Year Enrolled</th>
+                                <th className="flex items-center">
+                                  Current Level
                                   <span
-                                    className={`p-1 rounded text-bold text-type text-p4 uppercase
+                                    className="w-3 h-3 cursor-pointer has-svg ml-1 lowercase"
+                                    data-tooltip-id="info"
+                                    data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
+                                      <div>
+                                        **Indicates students overall progress
+                                        level based on their goals &amp;
+                                        targets.
+                                      </div>
+                                    )}
+                                    data-tooltip-place="top"
+                                  >
+                                    <InfoIcon />
+                                    <Tooltip id="info" />
+                                  </span>
+                                </th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {allStudents.map((data, i) => (
+                                <TableRow
+                                  className="p-2 row"
+                                  key={`student-${i}`}
+                                >
+                                  <td>{i + 1}</td>
+                                  <td>
+                                    {staffDetails?.schoolDetails?.shortcode}
+                                    {data.student_id
+                                      .toString()
+                                      .padStart(4, "0")}
+                                  </td>
+                                  <td>
+                                    {data.first_name} {data.last_name}
+                                  </td>
+                                  <td>{data.year_enrolled}</td>
+                                  <td>
+                                    <span
+                                      className={`p-1 rounded text-bold text-type text-p4 uppercase
                                   ${
                                     data.grade_color == "blue"
                                       ? " bg-rating-blue"
@@ -324,56 +330,59 @@ const Students = () => {
                                       ? " bg-rating-red"
                                       : "bg-zinc-200"
                                   }`}
-                                  >
-                                    {data.grade_color
-                                      ? data.grade_color
-                                      : "Not Graded"}
-                                  </span>
-                                </td>
-                                <td className="flex items-start justify-start">
-                                  <div
-                                    className=" w-5 h-5 cursor-pointer has-svg mr-3"
-                                    onClick={() => openEditModal(data)}
-                                  >
-                                    <EditIcon />
-                                  </div>
-                                </td>
-                              </TableRow>
-                            ))}
-                          </tbody>
-                        </Table>
-                      ) : (
-                        <div className="no-data">No Students.</div>
-                      ))}
-                  </div>
-                </TableWrapper>
-              ) : (
-                pageError && (
-                  <div className="p-8 mt-20">
-                    <p className="text-center font-bold">
-                      Error fetching request.
-                    </p>
-                  </div>
-                )
-              )}
-            </div>
-            <div className="col-span-2 h-screen border-l border-solid border-gray-200">
-              <div className="py-20 px-5">
-                <h1 className="head-text text-xl font-medium pb-5">Overview</h1>
-                <div className="bg-white rounded-md shadow-md w-fit">
-                  <div className="p-6 mb-10">
-                    <div className="text-4xl font-bold text-type mb-2">
-                      {allStudents?.length}
+                                    >
+                                      {data.grade_color != "null"
+                                        ? data.grade_color
+                                        : "Not Graded"}
+                                    </span>
+                                  </td>
+                                  <td className="flex items-start justify-start">
+                                    <div
+                                      className=" w-5 h-5 cursor-pointer has-svg mr-3"
+                                      onClick={() => openEditModal(data)}
+                                    >
+                                      <EditIcon />
+                                    </div>
+                                  </td>
+                                </TableRow>
+                              ))}
+                            </tbody>
+                          </Table>
+                        ) : (
+                          <div className="no-data">No Students.</div>
+                        ))}
                     </div>
-                    <div className="text-black-600 font-medium text-sm">
-                      Assigned Students
+                  </TableWrapper>
+                ) : (
+                  pageError && (
+                    <div className="p-8 mt-20">
+                      <p className="text-center font-bold">
+                        Error fetching request.
+                      </p>
+                    </div>
+                  )
+                )}
+              </div>
+              <div className="col-span-2 h-screen border-l border-solid border-gray-200">
+                <div className="py-20 px-5">
+                  <h1 className="head-text text-xl font-medium pb-5">
+                    Overview
+                  </h1>
+                  <div className="bg-white rounded-md shadow-md w-fit">
+                    <div className="p-6 mb-10">
+                      <div className="text-4xl font-bold text-type mb-2">
+                        {allStudents?.length}
+                      </div>
+                      <div className="text-black-600 font-medium text-sm">
+                        Assigned Students
+                      </div>
                     </div>
                   </div>
+                  {allStudents && allStudents.length > 0 && <Pie data={data} />}
                 </div>
-                {allStudents && allStudents.length > 0 && <Pie data={data} />}
               </div>
             </div>
-          </div>
+          )}
         </Layout>
       )}
 
