@@ -36,6 +36,7 @@ const Students = () => {
 
   const [initialLoad, setInitialLoad] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
   const [pageError, setPageError] = useState(false);
   const [adminDetails, setAdminDetails] = useState(null);
 
@@ -161,7 +162,7 @@ const Students = () => {
   };
 
   const linkStudentToStaff = () => {
-    setIsLoading(true);
+    setModalLoading(true);
     setFormError(false);
     let data = {
       staffId: assignedStaff?.val,
@@ -169,14 +170,14 @@ const Students = () => {
     axiosInstance
       .post(`/student/assign/${currentStudentDetails?.student_id}`, data)
       .then((res) => {
-        setIsLoading(false);
+        setModalLoading(false);
         toast.success(res.data?.message);
         setTimeout(() => {
           window.location.reload();
         }, 1500);
       })
       .catch((err) => {
-        setIsLoading(false);
+        setModalLoading(false);
         setFormError("An error occurred: " + err.response?.data?.message);
       });
   };
@@ -191,7 +192,7 @@ const Students = () => {
       setFormError(validateEmail(otherDetails.contact_email));
     } else {
       setFormError(false);
-      setIsLoading(true);
+      setModalLoading(true);
       let details = {
         ...data,
         schoolId: adminDetails?.school_id,
@@ -203,14 +204,14 @@ const Students = () => {
       axiosInstance
         .post("/student/new", details)
         .then(() => {
-          setIsLoading(false);
+          setModalLoading(false);
           toast.success("Successfully registered new student");
           setTimeout(() => {
             window.location.reload();
           }, 1500);
         })
         .catch((err) => {
-          setIsLoading(false);
+          setModalLoading(false);
           setFormError("An error occurred: " + err.response?.data?.message);
         });
     }
@@ -226,7 +227,7 @@ const Students = () => {
       setFormError(validateEmail(otherDetails.contact_email));
     } else {
       setFormError(false);
-      setIsLoading(true);
+      setModalLoading(true);
       let details = {
         first_name: data.fname,
         last_name: data.lname,
@@ -238,32 +239,32 @@ const Students = () => {
       axiosInstance
         .put(`/student/${currentStudentDetails?.student_id}`, details)
         .then(() => {
-          setIsLoading(false);
+          setModalLoading(false);
           toast.success("Successfully updated student details");
           setTimeout(() => {
             window.location.reload();
           }, 1500);
         })
         .catch((err) => {
-          setIsLoading(false);
+          setModalLoading(false);
           setFormError("An error occurred: " + err.response?.data?.message);
         });
     }
   };
 
   const deleteStudent = () => {
-    setIsLoading(true);
+    setModalLoading(true);
     axiosInstance
       .delete(`/student/${currentId}`)
       .then(() => {
-        setIsLoading(false);
+        setModalLoading(false);
         toast.success("Successfully deleted student");
         setTimeout(() => {
           window.location.reload();
         }, 1500);
       })
       .catch((err) => {
-        setIsLoading(false);
+        setModalLoading(false);
         toast.error(err.response?.data?.message);
       });
   };
@@ -277,16 +278,16 @@ const Students = () => {
           data?.staffDetails?.first_name + " " + data?.staffDetails?.last_name,
       });
     }
-    setIsLoading(true);
+    setModalLoading(true);
     axiosInstance
       .get(`/staffs/${adminDetails?.school_id}`)
       .then((res) => {
-        setIsLoading(false);
+        setModalLoading(false);
         setAllStaff(res.data?.data?.staffs);
         setIsLinkModalOpen(true);
       })
       .catch((err) => {
-        setIsLoading(false);
+        setModalLoading(false);
         toast.error("An error occurred: " + err.response?.data?.message);
         setCurrentStudentDetails(null);
         setAssignedStaff({
@@ -482,7 +483,7 @@ const Students = () => {
 
       <CustomModal
         isOpen={isLinkModalOpen}
-        modalLoading={isLoading}
+        modalLoading={modalLoading}
         onRequestClose={() => closeLinkModal()}
         confirmAction={() => handleSubmit(linkStudentToStaff)()}
       >
@@ -537,7 +538,7 @@ const Students = () => {
 
       <CustomModal
         isOpen={isCreateModalOpen}
-        modalLoading={isLoading}
+        modalLoading={modalLoading}
         onRequestClose={() => {
           setIsCreateModalOpen(false);
           reset();
@@ -668,7 +669,7 @@ const Students = () => {
           setIsEditModalOpen(false);
           reset();
         }}
-        modalLoading={isLoading}
+        modalLoading={modalLoading}
         confirmAction={() => handleSubmit(updateStudentDetails)()}
       >
         <div>
@@ -797,7 +798,7 @@ const Students = () => {
         message="This will delete the selected student and ALL of their records!"
       />
 
-      {isLoading && (
+      {modalLoading && (
         <div className="p-8 mt-20">
           <Loader />
         </div>

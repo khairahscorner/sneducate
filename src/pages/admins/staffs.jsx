@@ -16,6 +16,7 @@ import Loader from "../../components/loader";
 import { Table, TableWrapper, TableRow } from "../../components/table";
 import { ReactComponent as DeleteIcon } from "../../assets/icons/delete.svg";
 import { ReactComponent as EditIcon } from "../../assets/icons/edit.svg";
+import { ReactComponent as ResetIcon } from "../../assets/icons/reset-password.svg";
 import CustomModal from "../../components/modals/modal";
 import ConfirmationModal from "../../components/modals/confirmModal";
 
@@ -37,6 +38,7 @@ const Staffs = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [currentStaffDetails, setCurrentStaffDetails] = useState(null);
   const [currentId, setCurrentId] = useState(null);
   const [formError, setFormError] = useState(null);
@@ -175,6 +177,23 @@ const Staffs = () => {
       });
   };
 
+  const resetStaffPassword = () => {
+    setIsLoading(true);
+    axiosInstance
+      .get(`/reset-password/${currentId}`)
+      .then(() => {
+        setIsLoading(false);
+        toast.success("Successfully reset staff password");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        toast.error(err.response?.data?.message);
+      });
+  };
+
   const openEditModal = (data) => {
     setIsEditModalOpen(true);
     setCurrentStaffDetails(data);
@@ -186,6 +205,14 @@ const Staffs = () => {
   };
   const closeConfirmModal = () => {
     setIsDeleteModalOpen(false);
+    setCurrentId(null);
+  };
+  const openResetModal = (id) => {
+    setIsResetModalOpen(true);
+    setCurrentId(id);
+  };
+  const closeResetModal = () => {
+    setIsResetModalOpen(false);
     setCurrentId(null);
   };
 
@@ -252,6 +279,12 @@ const Staffs = () => {
                                   onClick={() => openEditModal(data)}
                                 >
                                   <EditIcon />
+                                </div>
+                                <div
+                                  className=" w-5 h-5 cursor-pointer has-svg mr-3"
+                                  onClick={() => openResetModal(data.staff_id)}
+                                >
+                                  <ResetIcon />
                                 </div>
                                 <div
                                   className="w-5 h-5 cursor-pointer has-svg"
@@ -510,6 +543,13 @@ const Staffs = () => {
         confirmAction={() => deleteStaff()}
         type="delete"
         message="This will delete the selected staff profile and all their students will be unassigned unless reassigned to another staff!"
+      />
+
+      <ConfirmationModal
+        isOpen={isResetModalOpen}
+        onRequestClose={() => closeResetModal()}
+        confirmAction={() => resetStaffPassword()}
+        message="This will reset the password of the selected staff account and send them a reactivation email"
       />
 
       {isLoading && (
