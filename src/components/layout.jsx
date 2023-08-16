@@ -1,10 +1,13 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ReactComponent as LogoIcon } from "../assets/icons/logo.svg";
+import WelcomeModal from "./modals/welcomeModal";
 
 const Layout = (props) => {
   const { children, userType, userDetails } = props;
+  const [guideModalOpen, setGuideModalOpen] = useState(false);
 
   const logOut = () => {
     localStorage.removeItem("token");
@@ -15,11 +18,7 @@ const Layout = (props) => {
   };
 
   const openGuide = () => {
-    if (userType === "school_admin") {
-      console.log("Admin");
-    } else if (userType === "staff") {
-      console.log(" Staff");
-    }
+    setGuideModalOpen(true);
   };
 
   return (
@@ -162,7 +161,10 @@ const Layout = (props) => {
               </>
             ) : null}
             <li>
-              <a className="nav-link px-10 py-3 cursor-pointer" onClick={() => logOut()}>
+              <a
+                className="nav-link px-10 py-3 cursor-pointer"
+                onClick={() => logOut()}
+              >
                 <div className="text-lg">Logout</div>
               </a>
             </li>
@@ -193,6 +195,11 @@ const Layout = (props) => {
         )}
         {children}
       </main>
+
+      <WelcomeModal
+        isOpen={guideModalOpen}
+        onRequestClose={() => setGuideModalOpen(false)}
+      />
     </div>
   );
 };
