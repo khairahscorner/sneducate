@@ -313,6 +313,7 @@ const TermCurriculums = () => {
       ...data,
       success_rating:
         data?.success_rating != "" ? parseInt(data?.success_rating) : 0,
+      prev_rating: currTarget.success_rating,
     };
     axiosInstance
       .put(`/target/${currTarget?.target_id}`, details)

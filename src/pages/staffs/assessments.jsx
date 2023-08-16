@@ -345,11 +345,16 @@ const AssessComponent = ({
       studentId,
       targets_ratings:
         selectedTargets.length > 0
-          ? selectedTargets.map((target, i) => ({
-              target_id: target.value,
-              prev_rating: target.prev_rating,
-              success_rating: parseInt(ratings[i]),
-            }))
+          ? selectedTargets.map((target, i) => {
+              let matchedTarget = targetOptions.find(
+                (option) => option.value == target.value
+              );
+              return {
+                target_id: target.value,
+                prev_rating: matchedTarget.prev_rating,
+                success_rating: parseInt(ratings[i]),
+              };
+            })
           : [],
       academic_year: yearTerm.year,
       term: yearTerm.term,
@@ -378,11 +383,16 @@ const AssessComponent = ({
       baseline_summary: data.baseline_summary,
       improvement: data.improvement,
       comments: data.comments,
-      targets_ratings: selectedTargets.map((target, i) => ({
-        target_id: target.value,
-        prev_rating: target.success_rating,
-        success_rating: parseInt(ratings[i]),
-      })),
+      targets_ratings: selectedTargets.map((target, i) => {
+        let matchedTarget = targetOptions.find(
+          (option) => option.value == target.value
+        );
+        return {
+          target_id: target.value,
+          prev_rating: matchedTarget.prev_rating,
+          success_rating: parseInt(ratings[i]),
+        };
+      }),
     };
     setFormLoading(true);
     axiosInstance
@@ -837,7 +847,7 @@ const AssessComponent = ({
         </form>
       </div>
       {formLoading && (
-        <div className="p-8 mt-20">
+        <div className="fixed top-0 bottom-0 left-0 right-0">
           <Loader />
         </div>
       )}
