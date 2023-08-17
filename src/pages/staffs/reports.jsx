@@ -16,7 +16,7 @@ import Button from "../../components/button";
 import { ReactComponent as BackIcon } from "../../assets/icons/arrow-left.svg";
 import { Select } from "../../components/input/select";
 import Loader from "../../components/loader";
-import { formatDate } from "../../config";
+import { captureAndDownloadPDF, formatDate } from "../../config";
 import { Table, TableRow, TableWrapper } from "../../components/table";
 import { ReactComponent as StarIcon } from "../../assets/icons/star.svg";
 import { ReactComponent as SendIcon } from "../../assets/icons/send.svg";
@@ -412,12 +412,19 @@ export default Reports;
 
 const StudentReport = ({ reportDetails }) => {
   return (
-    <div>
+    <div className="report-container">
       <div className="flex items-center mb-4">
         <h3 className="text-xl font-medium">
           Term Report for {reportDetails?.generatedFor}
         </h3>
-        <div className="w-4 h-4 ml-1.5 cursor-pointer has-svg">
+        <div
+          className="w-4 h-4 ml-1.5 cursor-pointer has-svg"
+          onClick={() =>
+            captureAndDownloadPDF(
+              `${reportDetails?.generatedBy}-${reportDetails?.session}.pdf`
+            )
+          }
+        >
           <DownloadIcon />
         </div>
       </div>
@@ -607,10 +614,13 @@ const GroupReport = ({ reportDetails }) => {
     return Math.round((arr.length / reportDetails.studentCount) * 100);
   };
   return (
-    <div>
+    <div className="report-container">
       <div className="flex items-center mb-4">
         <h3 className="text-xl font-medium">Students Report</h3>
-        <div className="w-4 h-4 ml-1.5 cursor-pointer has-svg">
+        <div
+          className="w-4 h-4 ml-1.5 cursor-pointer has-svg"
+          onClick={() => captureAndDownloadPDF("students-metrics-report.pdf")}
+        >
           <DownloadIcon />
         </div>
       </div>

@@ -1,3 +1,5 @@
+import html2pdf from "html2pdf.js";
+
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -70,4 +72,19 @@ export const customStyles = {
         maxWidth: "50%",
         height: "80vh", // Limit the height to maintain visibility on smaller screens
     },
+};
+
+export const captureAndDownloadPDF = (name) => {
+    const content = document.querySelector(".report-container");
+
+    const opt = {
+        margin: 10,
+        filename: name,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "px", format: [1300, 1400], orientation: "landscape" },
+        hotfixes: ["px_scaling"],
+    };
+
+    html2pdf().from(content).set(opt).save();
 };
