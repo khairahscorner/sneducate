@@ -249,9 +249,9 @@ const Schools = () => {
             <div className="flex flex-wrap justify-between items-center mb-8">
               <h1 className="head-text text-3xl font-medium"> All Schools</h1>
               <Button
-                click={() => {
-                  setIsCreateModalOpen(true);
-                }}
+                // click={() => {
+                //   setIsCreateModalOpen(true);
+                // }}
                 type="primary"
                 id="open-create-new"
                 extraClasses="w-auto mb-4"
