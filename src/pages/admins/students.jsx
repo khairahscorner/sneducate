@@ -469,7 +469,7 @@ const Students = () => {
                         {allStudents?.length}
                       </div>
                       <div className="text-black-600 font-medium text-sm">
-                        Assigned Students
+                        Students
                       </div>
                     </div>
                   </div>

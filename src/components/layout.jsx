@@ -94,19 +94,6 @@ const Layout = (props) => {
                     <div className="text-lg">Student Directory</div>
                   </NavLink>
                 </li>
-
-                <li>
-                  <NavLink
-                    to="/school/reports"
-                    className={({ isActive }) =>
-                      isActive
-                        ? "active nav-link px-10 py-3"
-                        : "nav-link px-10 py-3"
-                    }
-                  >
-                    <div className="text-lg">Reports</div>
-                  </NavLink>
-                </li>
               </>
             ) : userType === "staff" ? (
               <>
