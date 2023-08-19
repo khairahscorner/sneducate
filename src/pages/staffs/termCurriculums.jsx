@@ -877,7 +877,30 @@ const TermCurriculums = () => {
                     )}
                   </div>
                 ) : (
-                  <Placeholder message={"Select a student to view the IEPs"} />
+                  <>
+                    <Placeholder message={"Select a student to view the IEPs"}>
+                      <div className="w-fit mx-auto my-5 bg-zinc-100 rounded-md border border-solid border-zinc-200 p-5">
+                        <p className="text-xl text-bold text-gray-800 mb-3">
+                          Create Individual Education Plans for your students
+                        </p>
+                        <ul className="list-disc pl-6">
+                          <li className="mb-1">
+                            Create new curriculums for different terms.
+                          </li>
+                          <li className="mb-1">
+                            Add new goals under each curriculum.
+                          </li>
+                          <li className="mb-1">
+                            Add short term targets for each goal.
+                          </li>
+                          <li className="mb-1">
+                            Easily import goals and targets from previous
+                            curriculums.
+                          </li>
+                        </ul>
+                      </div>
+                    </Placeholder>
+                  </>
                 )}
               </div>
             </div>

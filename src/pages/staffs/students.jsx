@@ -247,8 +247,25 @@ const Students = () => {
           {isLoading ? (
             <Preloader />
           ) : (
-            <div className="grid grid-cols-7 relative">
-              <div className="py-20 px-7 col-span-5">
+            <>
+            <div className="w-fit mx-7 my-5 bg-zinc-100 rounded-md border border-solid border-zinc-200 p-3">
+              <p className="text-xl text-bold text-gray-800 mb-3">
+              Manage your assigned students
+              </p>
+              <ul className="list-disc pl-6">
+                <li className="mb-1">
+                  Update students records.
+                </li>
+                <li className="mb-1">
+                Add new students.
+                </li>
+                <li className="mb-1">
+                  Get an overview of your students progress levels.
+                </li>
+              </ul>
+            </div>
+            <div className="grid grid-cols-7 relative border-t border-solid border-gray-200">
+              <div className="pb-20 pt-6 px-7 col-span-5">
                 <div className="flex flex-wrap justify-between items-center mb-8">
                   <h1 className="head-text text-3xl font-medium">
                     {" "}
@@ -363,8 +380,8 @@ const Students = () => {
                   )
                 )}
               </div>
-              <div className="col-span-2 h-screen border-l border-solid border-gray-200">
-                <div className="py-20 px-5">
+              <div className="col-span-2 h-fit border-l border-solid border-gray-200">
+                <div className="pb-20 pt-6 px-5">
                   <h1 className="head-text text-xl font-medium pb-5">
                     Overview
                   </h1>
@@ -382,6 +399,7 @@ const Students = () => {
                 </div>
               </div>
             </div>
+            </>
           )}
         </Layout>
       )}

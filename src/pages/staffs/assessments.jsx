@@ -274,11 +274,27 @@ const Assessments = () => {
                     )}
                   </>
                 ) : (
-                  <Placeholder
-                    message={
-                      "Select a student to view all recorded assessments"
-                    }
-                  />
+                  <>
+                    <Placeholder
+                      message={
+                        "Select a student to view all recorded assessments"
+                      }
+                    >
+                      <div className="w-fit mx-auto my-5 bg-zinc-100 rounded-md border border-solid border-zinc-200 p-5">
+                        <p className="text-xl text-bold text-gray-800 mb-3">
+                          Create Assessment Records for your students
+                        </p>
+                        <ul className="list-disc pl-6">
+                          <li className="mb-1">
+                            Add new assessment files addressing targets.
+                          </li>
+                          <li className="mb-1">
+                            Update assessments to reflect any related updates.
+                          </li>
+                        </ul>
+                      </div>
+                    </Placeholder>
+                  </>
                 )}
               </div>
             </div>

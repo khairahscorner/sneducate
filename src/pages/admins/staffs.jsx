@@ -231,112 +231,122 @@ const Staffs = () => {
             role: adminDetails?.role,
           }}
         >
-          <div className="py-20 px-10">
-            <div className="flex flex-wrap justify-between items-center mb-8">
-              <h1 className="head-text text-3xl font-medium">
-                {" "}
-                All School Staff
-              </h1>
-              <Button
-                // click={() => {
-                //   setIsCreateModalOpen(true);
-                // }}
-                type="primary"
-                id="open-create-new"
-                extraClasses="w-auto mb-4"
-                size="big"
-              >
-                <span
-                  className="text-p1 py-3"
-                  data-tooltip-id="not-allowed"
-                  data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
-                    <div>
-                      **Unable to register new staff, email service is currently
-                      down.
-                    </div>
-                  )}
-                  data-tooltip-place="left"
-                >
-                  Register New Staff
-                  <Tooltip id="not-allowed" />
-                </span>
-              </Button>
+          <>
+            <div className="w-fit mx-10 my-5 bg-zinc-100 rounded-md border border-solid border-zinc-200 p-3">
+              <p className="text-xl text-bold text-gray-800 mb-3">
+                Manage your Staff Records
+              </p>
+              <ul className="list-disc pl-6">
+                <li className="mb-1">Add new staff.</li>
+                <li className="mb-1">Update/delete staff records.</li>
+                <li className="mb-1">Reset staff password.</li>
+              </ul>
             </div>
-            {allStaff ? (
-              <TableWrapper>
-                <div className="scroll-table">
-                  {allStaff &&
-                    (allStaff.length > 0 ? (
-                      <Table className="w-full min-w-700px">
-                        <thead>
-                          <tr className="row">
-                            <th>S/N</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Is Activated?</th>
-                            <th>No. of Students</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {allStaff.map((data, i) => (
-                            <TableRow className="p-2 row" key={`staff-${i}`}>
-                              <td>{i + 1}</td>
-                              <td>
-                                {data.first_name} {data.last_name}
-                              </td>
-                              <td>{data.email}</td>
-                              <td>{data.isVerified ? "Yes" : "No"}</td>
-                              <td>{data.studentCount}</td>
-                              <td className="flex items-start justify-start">
-                                <div
-                                  className=" w-5 h-5 cursor-pointer has-svg mr-3"
-                                  onClick={() => openEditModal(data)}
-                                >
-                                  <EditIcon />
-                                </div>
-                                <div
-                                  className=" w-5 h-5 cursor-pointer has-svg mr-3"
-                                  // onClick={() => openResetModal(data.staff_id)}
-                                  data-tooltip-id="info"
-                                  data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
-                                    <div>
-                                      **Email service is currently down.
-                                    </div>
-                                  )}
-                                  data-tooltip-place="top"
-                                >
-                                  <ResetIcon />
-                                  <Tooltip id="info" />
-                                </div>
-                                <div
-                                  className="w-5 h-5 cursor-pointer has-svg"
-                                  onClick={() =>
-                                    openConfirmModal(data.staff_id)
-                                  }
-                                >
-                                  <DeleteIcon />
-                                </div>
-                              </td>
-                            </TableRow>
-                          ))}
-                        </tbody>
-                      </Table>
-                    ) : (
-                      <div className="no-data">No Staff.</div>
-                    ))}
-                </div>
-              </TableWrapper>
-            ) : (
-              pageError && (
-                <div className="p-8 mt-20">
-                  <p className="text-center font-bold">
-                    Error fetching request.
-                  </p>
-                </div>
-              )
-            )}
-          </div>
+            <div className="pb-20 pt-5 px-10">
+              <div className="flex flex-wrap justify-between items-start mb-8">
+                <h1 className="head-text text-3xl font-medium">All School Staff
+                </h1>
+                <Button
+                  // click={() => {
+                  //   setIsCreateModalOpen(true);
+                  // }}
+                  type="primary"
+                  id="open-create-new"
+                  extraClasses="w-auto mb-4"
+                  size="big"
+                >
+                  <span
+                    className="text-p1 py-3"
+                    data-tooltip-id="not-allowed"
+                    data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
+                      <div>
+                        **Unable to register new staff, email service is
+                        currently down.
+                      </div>
+                    )}
+                    data-tooltip-place="left"
+                  >
+                    Register New Staff
+                    <Tooltip id="not-allowed" />
+                  </span>
+                </Button>
+              </div>
+              {allStaff ? (
+                <TableWrapper>
+                  <div className="scroll-table">
+                    {allStaff &&
+                      (allStaff.length > 0 ? (
+                        <Table className="w-full min-w-700px">
+                          <thead>
+                            <tr className="row">
+                              <th>S/N</th>
+                              <th>Name</th>
+                              <th>Email</th>
+                              <th>Is Activated?</th>
+                              <th>No. of Students</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {allStaff.map((data, i) => (
+                              <TableRow className="p-2 row" key={`staff-${i}`}>
+                                <td>{i + 1}</td>
+                                <td>
+                                  {data.first_name} {data.last_name}
+                                </td>
+                                <td>{data.email}</td>
+                                <td>{data.isVerified ? "Yes" : "No"}</td>
+                                <td>{data.studentCount}</td>
+                                <td className="flex items-start justify-start">
+                                  <div
+                                    className=" w-5 h-5 cursor-pointer has-svg mr-3"
+                                    onClick={() => openEditModal(data)}
+                                  >
+                                    <EditIcon />
+                                  </div>
+                                  <div
+                                    className=" w-5 h-5 cursor-pointer has-svg mr-3"
+                                    // onClick={() => openResetModal(data.staff_id)}
+                                    data-tooltip-id="info"
+                                    data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
+                                      <div>
+                                        **Email service is currently down.
+                                      </div>
+                                    )}
+                                    data-tooltip-place="top"
+                                  >
+                                    <ResetIcon />
+                                    <Tooltip id="info" />
+                                  </div>
+                                  <div
+                                    className="w-5 h-5 cursor-pointer has-svg"
+                                    onClick={() =>
+                                      openConfirmModal(data.staff_id)
+                                    }
+                                  >
+                                    <DeleteIcon />
+                                  </div>
+                                </td>
+                              </TableRow>
+                            ))}
+                          </tbody>
+                        </Table>
+                      ) : (
+                        <div className="no-data">No Staff.</div>
+                      ))}
+                  </div>
+                </TableWrapper>
+              ) : (
+                pageError && (
+                  <div className="p-8 mt-20">
+                    <p className="text-center font-bold">
+                      Error fetching request.
+                    </p>
+                  </div>
+                )
+              )}
+            </div>
+          </>
         </Layout>
       )}
 

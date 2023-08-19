@@ -208,192 +208,209 @@ const Reports = () => {
                 Could not complete request.
               </p>
             ) : (
-              <div className="px-10">
-                <div className="flex flex-wrap justify-between items-center py-14">
-                  <h1 className="head-text text-3xl font-medium">Reports</h1>
+              <>
+                <div className="w-fit mx-10 my-5 bg-zinc-100 rounded-md border border-solid border-zinc-200 p-3">
+                  <p className="text-xl text-bold text-gray-800 mb-3">
+                    Create Customised Reports
+                  </p>
+                  <ul className="list-disc pl-6">
+                    <li className="mb-1">
+                      Generate students reports for specific curriculums and
+                      their overall progress to-date.
+                    </li>
+                    <li className="mb-1">
+                      Generate metrics reports for an overview of how your
+                      students are doing overall.
+                    </li>
+                  </ul>
                 </div>
-                <div className="grid grid-cols-9 gap-4 mb-20">
-                  <div className="col-span-2 py-4 px-6 border border-solid border-gray-200">
-                    <h3 className="text-lg font-medium mb-4 flex justify-between items-center">
-                      Choose Options
-                    </h3>
-                    <div className="mt-6">
-                      <form onSubmit={handleSubmit(generateReport)}>
-                        <ErrorMessage
-                          style={{ marginBottom: "30px" }}
-                          message={formError}
-                        />
-                        <div className="mb-4">
-                          <Controller
-                            name="type"
-                            defaultValue=""
-                            rules={{ required: true }}
-                            control={control}
-                            render={({ fieldState: { error } }) => (
-                              <>
-                                <Select
-                                  selectText="Select type:"
-                                  label="Report type"
-                                  selected={
-                                    selectedReportType == "student"
-                                      ? "Student Report"
-                                      : selectedReportType == "metrics"
-                                      ? "Metrics Report"
-                                      : ""
-                                  }
-                                  error={error}
-                                  message="Select a type"
-                                >
-                                  {reportTypes.map((type, i) => (
-                                    <div
-                                      key={`report-type-${i}`}
-                                      onClick={() => {
-                                        setSelectedReportType(type);
-                                        setValue("type", type);
-                                        setSwitchView(false);
-                                      }}
-                                      className="p-2 text-sm border-b border-b-gray-200 cursor-pointer last:border-none"
-                                    >
-                                      {type == "student"
-                                        ? "Student Report"
-                                        : "Metrics Report"}
-                                    </div>
-                                  ))}
-                                </Select>
-                              </>
-                            )}
+                <div className="px-10">
+                  <div className="flex flex-wrap justify-between items-center py-6">
+                    <h1 className="head-text text-3xl font-medium">Reports</h1>
+                  </div>
+                  <div className="grid grid-cols-9 gap-4 mb-20">
+                    <div className="col-span-2 py-4 px-6 border border-solid border-gray-200">
+                      <h3 className="text-lg font-medium mb-4 flex justify-between items-center">
+                        Choose Options
+                      </h3>
+                      <div className="mt-6">
+                        <form onSubmit={handleSubmit(generateReport)}>
+                          <ErrorMessage
+                            style={{ marginBottom: "30px" }}
+                            message={formError}
                           />
+                          <div className="mb-4">
+                            <Controller
+                              name="type"
+                              defaultValue=""
+                              rules={{ required: true }}
+                              control={control}
+                              render={({ fieldState: { error } }) => (
+                                <>
+                                  <Select
+                                    selectText="Select type:"
+                                    label="Report type"
+                                    selected={
+                                      selectedReportType == "student"
+                                        ? "Student Report"
+                                        : selectedReportType == "metrics"
+                                        ? "Metrics Report"
+                                        : ""
+                                    }
+                                    error={error}
+                                    message="Select a type"
+                                  >
+                                    {reportTypes.map((type, i) => (
+                                      <div
+                                        key={`report-type-${i}`}
+                                        onClick={() => {
+                                          setSelectedReportType(type);
+                                          setValue("type", type);
+                                          setSwitchView(false);
+                                        }}
+                                        className="p-2 text-sm border-b border-b-gray-200 cursor-pointer last:border-none"
+                                      >
+                                        {type == "student"
+                                          ? "Student Report"
+                                          : "Metrics Report"}
+                                      </div>
+                                    ))}
+                                  </Select>
+                                </>
+                              )}
+                            />
+                          </div>
+                          {selectedReportType == "student" && (
+                            <>
+                              <div className="mb-4">
+                                <Controller
+                                  name="student"
+                                  defaultValue=""
+                                  rules={{ required: true }}
+                                  control={control}
+                                  render={({ fieldState: { error } }) => (
+                                    <>
+                                      <Select
+                                        selectText="Select:"
+                                        label="Choose student:"
+                                        selected={selectedStudent?.label}
+                                        error={error}
+                                        message="Select a student"
+                                      >
+                                        {allStudents &&
+                                          allStudents.map((student, i) => (
+                                            <div
+                                              key={`student-${i}`}
+                                              onClick={() => {
+                                                setSelectedStudent({
+                                                  value: student.student_id,
+                                                  label:
+                                                    student.first_name +
+                                                    " " +
+                                                    student.last_name,
+                                                });
+                                                setValue(
+                                                  "student",
+                                                  student.student_id
+                                                );
+                                                setSwitchView(false);
+                                              }}
+                                              className="p-2 text-sm border-b border-b-gray-200 cursor-pointer last:border-none"
+                                            >
+                                              {student.first_name +
+                                                " " +
+                                                student.last_name}
+                                            </div>
+                                          ))}
+                                      </Select>
+                                    </>
+                                  )}
+                                />
+                              </div>
+                              <div className="mb-4">
+                                <Controller
+                                  name="curr"
+                                  defaultValue=""
+                                  rules={{ required: true }}
+                                  control={control}
+                                  render={({ fieldState: { error } }) => (
+                                    <>
+                                      <Select
+                                        selectText="Select:"
+                                        label="Generate for:"
+                                        selected={selectedCurriculum?.label}
+                                        error={error}
+                                        message="Select one"
+                                      >
+                                        {studentCurriculums &&
+                                          studentCurriculums.map((curr, i) => (
+                                            <div
+                                              key={`student-curr-${i}`}
+                                              onClick={() => {
+                                                setSelectedCurriculum({
+                                                  val: curr?.curriculum_id,
+                                                  label:
+                                                    curr.academic_year +
+                                                    " " +
+                                                    curr.term,
+                                                });
+                                                setValue(
+                                                  "curr",
+                                                  curr.curriculum_id
+                                                );
+                                                setSwitchView(false);
+                                              }}
+                                              className="p-2 text-sm border-b border-b-gray-200 cursor-pointer last:border-none"
+                                            >
+                                              {curr.academic_year +
+                                                " " +
+                                                curr.term}
+                                            </div>
+                                          ))}
+                                      </Select>
+                                    </>
+                                  )}
+                                />
+                              </div>
+                            </>
+                          )}
+                          <Button
+                            click={handleSubmit(generateReport)}
+                            extraClasses="w-auto mt-3"
+                            size="small"
+                          >
+                            <span className="text-p1">Generate</span>
+                          </Button>
+                        </form>
+                      </div>
+                    </div>
+                    <div className="col-span-7 p-4 border border-solid border-gray-200">
+                      {switchView ? (
+                        <div>
+                          <div
+                            className="flex cursor-pointer items-center mb-4"
+                            onClick={() => restart()}
+                          >
+                            <div className=" w-5 h-5 has-svg mr-3">
+                              <BackIcon />
+                            </div>
+                            <p className="text-xs text-bold">Back</p>
+                          </div>
+                          {selectedReportType == "student" ? (
+                            <StudentReport reportDetails={reportDetails} />
+                          ) : (
+                            <GroupReport reportDetails={reportDetails} />
+                          )}
                         </div>
-                        {selectedReportType == "student" && (
-                          <>
-                            <div className="mb-4">
-                              <Controller
-                                name="student"
-                                defaultValue=""
-                                rules={{ required: true }}
-                                control={control}
-                                render={({ fieldState: { error } }) => (
-                                  <>
-                                    <Select
-                                      selectText="Select:"
-                                      label="Choose student:"
-                                      selected={selectedStudent?.label}
-                                      error={error}
-                                      message="Select a student"
-                                    >
-                                      {allStudents &&
-                                        allStudents.map((student, i) => (
-                                          <div
-                                            key={`student-${i}`}
-                                            onClick={() => {
-                                              setSelectedStudent({
-                                                value: student.student_id,
-                                                label:
-                                                  student.first_name +
-                                                  " " +
-                                                  student.last_name,
-                                              });
-                                              setValue(
-                                                "student",
-                                                student.student_id
-                                              );
-                                              setSwitchView(false);
-                                            }}
-                                            className="p-2 text-sm border-b border-b-gray-200 cursor-pointer last:border-none"
-                                          >
-                                            {student.first_name +
-                                              " " +
-                                              student.last_name}
-                                          </div>
-                                        ))}
-                                    </Select>
-                                  </>
-                                )}
-                              />
-                            </div>
-                            <div className="mb-4">
-                              <Controller
-                                name="curr"
-                                defaultValue=""
-                                rules={{ required: true }}
-                                control={control}
-                                render={({ fieldState: { error } }) => (
-                                  <>
-                                    <Select
-                                      selectText="Select:"
-                                      label="Generate for:"
-                                      selected={selectedCurriculum?.label}
-                                      error={error}
-                                      message="Select one"
-                                    >
-                                      {studentCurriculums &&
-                                        studentCurriculums.map((curr, i) => (
-                                          <div
-                                            key={`student-curr-${i}`}
-                                            onClick={() => {
-                                              setSelectedCurriculum({
-                                                val: curr?.curriculum_id,
-                                                label:
-                                                  curr.academic_year +
-                                                  " " +
-                                                  curr.term,
-                                              });
-                                              setValue(
-                                                "curr",
-                                                curr.curriculum_id
-                                              );
-                                              setSwitchView(false);
-                                            }}
-                                            className="p-2 text-sm border-b border-b-gray-200 cursor-pointer last:border-none"
-                                          >
-                                            {curr.academic_year +
-                                              " " +
-                                              curr.term}
-                                          </div>
-                                        ))}
-                                    </Select>
-                                  </>
-                                )}
-                              />
-                            </div>
-                          </>
-                        )}
-                        <Button
-                          click={handleSubmit(generateReport)}
-                          extraClasses="w-auto mt-3"
-                          size="small"
-                        >
-                          <span className="text-p1">Generate</span>
-                        </Button>
-                      </form>
+                      ) : (
+                        <div className="my-20 text-center">
+                          Reports generated will appear here
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <div className="col-span-7 p-4 border border-solid border-gray-200">
-                    {switchView ? (
-                      <div>
-                        <div
-                          className="flex cursor-pointer items-center mb-4"
-                          onClick={() => restart()}
-                        >
-                          <div className=" w-5 h-5 has-svg mr-3">
-                            <BackIcon />
-                          </div>
-                          <p className="text-xs text-bold">Back</p>
-                        </div>
-                        {selectedReportType == "student" ? (
-                          <StudentReport reportDetails={reportDetails} />
-                        ) : (
-                          <GroupReport reportDetails={reportDetails} />
-                        )}
-                      </div>
-                    ) : (
-                      <div className="my-20 text-center">
-                        Reports generated will appear here
-                      </div>
-                    )}
-                  </div>
                 </div>
-              </div>
+              </>
             )}
           </Layout>
 
