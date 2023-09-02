@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import PageTitle from "../../components/pageTitle";
 import Layout from "../../components/layout";
 import { toast } from "react-toastify";
+import ReactDOMServer from "react-dom/server";
+import { Tooltip } from "react-tooltip";
 import { Preloader } from "../../components/pageloader";
 import axiosInstance from "../../config/axios";
 import { tokenValidSuccess } from "../../store/slices/authSlice";
@@ -254,10 +256,24 @@ const Schools = () => {
                 // }}
                 type="primary"
                 id="open-create-new"
-                extraClasses="w-auto mb-4"
+                extraClasses="w-auto mb-4 cursor-not-allowed"
                 size="big"
               >
-                <span className="text-p1">Setup New school</span>
+                <span
+                  className="text-p1"
+                  data-tooltip-id="not-allowed"
+                  data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
+                    <div>
+                      **Unable to add new school, <br />
+                      email service for setting up admin account is currently
+                      down.
+                    </div>
+                  )}
+                  data-tooltip-place="left"
+                >
+                  Setup New school
+                  <Tooltip id="not-allowed" />
+                </span>
               </Button>
             </div>
             {allSchools ? (

@@ -244,7 +244,8 @@ const Staffs = () => {
             </div>
             <div className="pb-20 pt-5 px-10">
               <div className="flex flex-wrap justify-between items-start mb-8">
-                <h1 className="head-text text-3xl font-medium">All School Staff
+                <h1 className="head-text text-3xl font-medium">
+                  All School Staff
                 </h1>
                 <Button
                   // click={() => {
@@ -260,8 +261,8 @@ const Staffs = () => {
                     data-tooltip-id="not-allowed"
                     data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
                       <div>
-                        **Unable to register new staff, email service is
-                        currently down.
+                        **Unable to register new staff, <br /> service to send
+                        activation email is currently down.
                       </div>
                     )}
                     data-tooltip-place="left"
@@ -310,7 +311,8 @@ const Staffs = () => {
                                     data-tooltip-id="info"
                                     data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
                                       <div>
-                                        **Email service is currently down.
+                                        **Unable to reset staff password, <br />
+                                        email service is currently down.
                                       </div>
                                     )}
                                     data-tooltip-place="top"
