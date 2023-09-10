@@ -941,8 +941,8 @@ const TermCurriculums = () => {
               placeholder="email@email.com"
               rowType
             />
-            <Button type="primary" extraClasses="w-auto ml-3 p-0" size="big">
-              <div className=" w-5 h-5 cursor-not-allowed has-svg">
+            <Button type="primary" extraClasses="w-auto ml-3 p-0 cursor-not-allowed" size="big">
+              <div className=" w-5 h-5 has-svg">
                 <SendIcon />
               </div>
             </Button>
