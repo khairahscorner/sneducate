@@ -942,7 +942,7 @@ const TermCurriculums = () => {
               rowType
             />
             <Button type="primary" extraClasses="w-auto ml-3 p-0" size="big">
-              <div className=" w-5 h-5 cursor-pointer has-svg">
+              <div className=" w-5 h-5 cursor-not-allowed has-svg">
                 <SendIcon />
               </div>
             </Button>

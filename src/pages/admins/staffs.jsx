@@ -253,7 +253,7 @@ const Staffs = () => {
                   // }}
                   type="primary"
                   id="open-create-new"
-                  extraClasses="w-auto mb-4"
+                  extraClasses="w-auto mb-4 cursor-not-allowed"
                   size="big"
                 >
                   <span
@@ -306,7 +306,7 @@ const Staffs = () => {
                                     <EditIcon />
                                   </div>
                                   <div
-                                    className=" w-5 h-5 cursor-pointer has-svg mr-3"
+                                    className=" w-5 h-5 cursor-not-allowed has-svg mr-3"
                                     // onClick={() => openResetModal(data.staff_id)}
                                     data-tooltip-id="info"
                                     data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
