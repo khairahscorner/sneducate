@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import ReactDOMServer from "react-dom/server";
-import { Tooltip } from "react-tooltip";
 import PageTitle from "../../components/pageTitle";
 import { Preloader } from "../../components/pageloader";
 import Layout from "../../components/layout";
@@ -209,10 +207,10 @@ const Staffs = () => {
     setIsDeleteModalOpen(false);
     setCurrentId(null);
   };
-  // const openResetModal = (id) => {
-  //   setIsResetModalOpen(true);
-  //   setCurrentId(id);
-  // };
+  const openResetModal = (id) => {
+    setIsResetModalOpen(true);
+    setCurrentId(id);
+  };
   const closeResetModal = () => {
     setIsResetModalOpen(false);
     setCurrentId(null);
@@ -248,28 +246,15 @@ const Staffs = () => {
                   All School Staff
                 </h1>
                 <Button
-                  // click={() => {
-                  //   setIsCreateModalOpen(true);
-                  // }}
+                  click={() => {
+                    setIsCreateModalOpen(true);
+                  }}
                   type="primary"
                   id="open-create-new"
-                  extraClasses="w-auto mb-4 cursor-not-allowed"
+                  extraClasses="w-auto mb-4"
                   size="big"
                 >
-                  <span
-                    className="text-p1 py-3"
-                    data-tooltip-id="not-allowed"
-                    data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
-                      <div>
-                        **Unable to register new staff, <br /> service to send
-                        activation email is currently down.
-                      </div>
-                    )}
-                    data-tooltip-place="left"
-                  >
-                    Register New Staff
-                    <Tooltip id="not-allowed" />
-                  </span>
+                  <span className="text-p1 py-3">Register New Staff</span>
                 </Button>
               </div>
               {allStaff ? (
@@ -307,18 +292,11 @@ const Staffs = () => {
                                   </div>
                                   <div
                                     className=" w-5 h-5 cursor-not-allowed has-svg mr-3"
-                                    // onClick={() => openResetModal(data.staff_id)}
-                                    data-tooltip-id="info"
-                                    data-tooltip-html={ReactDOMServer.renderToStaticMarkup(
-                                      <div>
-                                        **Unable to reset staff password, <br />
-                                        email service is currently down.
-                                      </div>
-                                    )}
-                                    data-tooltip-place="top"
+                                    onClick={() =>
+                                      openResetModal(data.staff_id)
+                                    }
                                   >
                                     <ResetIcon />
-                                    <Tooltip id="info" />
                                   </div>
                                   <div
                                     className="w-5 h-5 cursor-pointer has-svg"
