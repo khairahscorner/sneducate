@@ -11,4 +11,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.AUTO_ASSIGN }}
           reviewers: |
             aishayusuff
-          assignees: author
+            khairahscorner
+          assignees: khairahscorner
