@@ -8,6 +8,7 @@ import { TextinputwithLeftIcon } from "../components/input/textinputwithicon";
 import { Textinput } from "../components/input/textinput";
 import Button from "../components/button";
 import axiosInstance from "../config/axios";
+import TextToSpeech from "../components/textToSpeech";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -51,6 +52,7 @@ const Login = () => {
       <PageTitle title="Login" />
       <div className="container mx-auto flex justify-center items-center h-screen">
         <div className="bg-slate-50 w-1/3 border rounded p-6">
+          <TextToSpeech />
           <div className="h-24 flex justify-center items-center">
             <Logo />
           </div>
