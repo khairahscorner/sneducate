@@ -1,4 +1,4 @@
-![logo](https://github.com/khairahscorner/sneducate/assets/38109438/5032c1f2-e403-4c16-a69e-7cb879e3aa4b)
+![logo](/src/assets/icons/logo.svg)
 
 ## About
 
