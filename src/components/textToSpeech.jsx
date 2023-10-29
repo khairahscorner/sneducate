@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ReactComponent as Logo } from "../assets/icons/speaker.svg";
 
 const TextToSpeech = () => {
@@ -10,6 +10,9 @@ const TextToSpeech = () => {
     if (!isReading) {
       const utterance = new SpeechSynthesisUtterance(document.body.textContent);
       synth.speak(utterance);
+      utterance.onend = () => {
+        setIsReading(false);
+      };
     } else {
       synth.cancel();
     }
@@ -17,10 +20,20 @@ const TextToSpeech = () => {
     setIsReading(!isReading);
   };
 
+  useEffect(() => {
+    return () => {
+      const synth = window.speechSynthesis;
+      synth.cancel();
+    };
+  }, []);
+
   return (
     <div>
       <div className="flex justify-center items-center">
-        <div className="w-8" onClick={handleButtonClick}>
+        <div
+          className={`w-8 ${isReading ? " fill-primary" : ""}`}
+          onClick={handleButtonClick}
+        >
           <Logo />
         </div>
       </div>
