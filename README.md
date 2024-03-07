@@ -45,6 +45,9 @@ Staff:  teuhaairah@gmail.com staffPass
 
 Several other features can be included. 
 
+### API Documentation
+Postman collection available [here](https://documenter.getpostman.com/view/6720754/2sA2xfYYiu).
+
 ### Does this Project sound interesting?
 
 If you would like to give feedback and/or contribute to the project (or just have a chat!), do send me an email ar airahyusuff@gmail.com.
