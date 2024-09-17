@@ -36,10 +36,9 @@ Available at: ***https://sneducate.netlify.app***
 2. Activate account
 3. Start managing your students' progress!
 
-### Test Account Details
-School Admin: airahyusuff@yahoo.com changedPass
+### Features View
 
-Staff:  teuhaairah@gmail.com staffPass
+[Showcase](/showcase)
 
 ### Improvements
 
